@@ -87,7 +87,8 @@ export default function WelcomeScreen({ onStart }) {
                 </span>
               </button>
 
-              <button
+              {/* Questions V2 - Hidden for now */}
+              {/* <button
                 onClick={() => onStart('recommendation_v2')}
                 className="group w-full border-2 border-slate-200 hover:border-transparent text-slate-900 hover:bg-gradient-to-r hover:from-[#7C2D3E] hover:to-[#9B3A4F] hover:text-white rounded-2xl p-4 md:p-6 shadow-lg hover:shadow-xl hover:shadow-[#7C2D3E]/20 transition-all duration-300 hover:scale-105 flex flex-col items-center justify-center text-center min-h-[100px]"
               >
@@ -95,7 +96,7 @@ export default function WelcomeScreen({ onStart }) {
                 <span className="text-xs md:text-sm text-slate-600 group-hover:text-white/90 leading-relaxed">
                   {t('questions_v2_desc')}
                 </span>
-              </button>
+              </button> */}
             </div>
           </motion.div>
 
