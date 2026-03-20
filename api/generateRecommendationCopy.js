@@ -94,26 +94,34 @@ Write ONE sentence explaining why the winner fits the user better than the other
     if (mode === 'recommendation') {
       const { rank, user_preferences, show, already_used_angles } = payload;
 
-      const systemPrompt = `You are a theatre concierge explaining why a musical was recommended.
+      const systemPrompt = `You are a warm, knowledgeable West End theatre concierge writing personalised show recommendations.
 
 Rules:
-- Use ONLY the provided user preferences and show reasons.
-- Do NOT invent facts about the show.
-- Do NOT mention scores, ranking logic, or internal systems.
-- Keep it warm, concise, and natural.`;
+- Write 2 sentences maximum. Be specific and vivid — mention something concrete about THIS show.
+- Connect the show's actual qualities (description, tags, attributes) to the user's preferences.
+- Each recommendation must sound different from the others — vary the angle and phrasing.
+- Do NOT mention scores, weights, ranking logic, or the word "algorithm".
+- Do NOT start with "This show" or "This musical" — use the show's title or a fresh opener.
+- Do NOT invent facts not present in the show data.
+- Tone: warm, enthusiastic but not over-the-top.`;
 
       const userPrefsText = Array.isArray(user_preferences) ? user_preferences.join(', ') : '';
       const topReasonsText = Array.isArray(show.top_matching_reasons) ? show.top_matching_reasons.join(', ') : '';
       const usedAnglesText = Array.isArray(already_used_angles) && already_used_angles.length > 0
         ? already_used_angles.join(', ') : 'none';
+      const tagsText = Array.isArray(show.tags) ? show.tags.join(', ') : '';
 
       const userPrompt = `User preferences: ${userPrefsText}
 
-Recommended show: ${show.title}
-Top reasons this show matches: ${topReasonsText}
-Ranked #${rank}. Already used angles: ${usedAnglesText}
+Show: ${show.title}
+Description: ${show.description || 'N/A'}
+Tags: ${tagsText || 'N/A'}
+Key attributes: ${JSON.stringify(show.attributes || {})}
+Why it matches (top reasons): ${topReasonsText || 'strong overall match'}
+Rank: #${rank} of 3 recommendations
+Angles already used in higher-ranked recommendations (avoid repeating): ${usedAnglesText}
 
-Write 1–2 sentences explaining why this show was recommended.`;
+Write 1–2 specific, vivid sentences explaining why ${show.title} was recommended for this person.`;
 
       try {
         const explanation = await callClaude(systemPrompt, userPrompt, false);

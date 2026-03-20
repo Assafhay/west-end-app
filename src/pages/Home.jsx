@@ -144,6 +144,15 @@ export default function Home() {
       ...prev,
       [questionId]: answer
     }));
+
+    // Auto-advance single-choice questions after a short delay (to show selection feedback)
+    const isSingleChoice = currentQuestion.type === 'single' || currentQuestion.type === 'single_choice';
+    const isLastQuestion = currentQuestionIndex >= filteredQuestions.length - 1;
+    if (isSingleChoice && !isLastQuestion) {
+      setTimeout(() => {
+        setCurrentQuestionIndex(prev => prev + 1);
+      }, 300);
+    }
   };
 
   const canProceed = () => {
@@ -1632,7 +1641,19 @@ export default function Home() {
               user_preferences: allUserPreferences,
               show: {
                 title: show.show_title,
-                top_matching_reasons: topMatchingReasons
+                description: getLocalizedValue(show, 'description'),
+                tags: show.tags ? String(show.tags).split(',').map(t => t.trim()).filter(Boolean) : [],
+                top_matching_reasons: topMatchingReasons,
+                attributes: {
+                  spectacle: show.spectacle_level,
+                  comedy: show.comedy_score,
+                  romance: show.romance_score,
+                  family_friendly: show.family_friendly,
+                  beginner_friendly: show.beginner_friendly,
+                  classic: show.classic,
+                  jukebox: show.jukebox,
+                  darkness: show.darkness_level,
+                }
               },
               already_used_angles: alreadyUsedAngles,
               language: i18n.language
