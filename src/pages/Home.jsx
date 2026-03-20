@@ -39,7 +39,6 @@ export default function Home() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState({});
   const [results, setResults] = useState([]);
-  const [adminSearchId, setAdminSearchId] = useState(null);
   const [scoringError, setScoringError] = useState(null);
   const isSubmittingRef = React.useRef(false);
 
@@ -1305,11 +1304,6 @@ export default function Home() {
         }
       }
 
-      console.log('[QUIZ_FINISH] phase=importSDK', { timestamp: Date.now() });
-
-      // Generate LLM explanations for top recommendations
-      const { base44 } = await import('@/api/base44Client');
-
       // Check if any show fails dates (for comparison mode)
       const anyShowFailsDates = mode === 'comparison' && recommendations.some(show =>
         show.filters_failed && show.filters_failed.some(f => f.includes('date') || f.includes('running'))
@@ -1362,21 +1356,25 @@ export default function Home() {
             }
           });
 
-          const winnerResponse = await base44.functions.invoke('generateRecommendationCopy', {
-            mode: 'comparison_intro',
-            language: i18n.language,
-            winner: buildShowData(winner),
-            compared_shows: recommendations.map(buildShowData),
-            user_preferences: winnerUserPreferences
-          });
+          const winnerResponse = await fetch('/api/generateRecommendationCopy', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              mode: 'comparison_intro',
+              language: i18n.language,
+              winner: buildShowData(winner),
+              compared_shows: recommendations.map(buildShowData),
+              user_preferences: winnerUserPreferences
+            })
+          }).then(r => r.json());
 
-          if (winnerResponse.data && winnerResponse.data.sentence) {
+          if (winnerResponse.sentence) {
             if (!winner.llm_explanation) {
               winner.llm_explanation = {};
             }
-            winner.llm_explanation.sentence = winnerResponse.data.sentence;
+            winner.llm_explanation.sentence = winnerResponse.sentence;
             winner.llm_explanation.bullets = [];
-          } else if (winnerResponse.data && winnerResponse.data.needs_fallback) {
+          } else if (winnerResponse.needs_fallback) {
             // Fallback: deterministic sentence
             const PHRASE = {
               classic: "a more classic musical feel",
@@ -1558,24 +1556,28 @@ export default function Home() {
             const candidates = generateCandidates(winner, show);
 
             try {
-              const response = await base44.functions.invoke('generateRecommendationCopy', {
-                mode: 'comparison_full',
-                winner: {
-                  title: winner.show_title,
-                  summary: buildShowSummary(winner)
-                },
-                loser: {
-                  title: show.show_title,
-                  summary: buildShowSummary(show)
-                },
-                user_preferences: userPreferences,
-                candidates: candidates,
-                forbidden_angles: Array.from(usedAngles),
-                language: i18n.language
-              });
+              const response = await fetch('/api/generateRecommendationCopy', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  mode: 'comparison_full',
+                  winner: {
+                    title: winner.show_title,
+                    summary: buildShowSummary(winner)
+                  },
+                  loser: {
+                    title: show.show_title,
+                    summary: buildShowSummary(show)
+                  },
+                  user_preferences: userPreferences,
+                  candidates: candidates,
+                  forbidden_angles: Array.from(usedAngles),
+                  language: i18n.language
+                })
+              }).then(r => r.json());
 
-              if (response.data && response.data.sentence) {
-                show.comparison_reason = response.data.sentence;
+              if (response.sentence) {
+                show.comparison_reason = response.sentence;
 
                 // Track which angle was likely used
                 const usedCandidate = candidates.find(c => !usedAngles.has(c.angle_id));
@@ -1621,26 +1623,26 @@ export default function Home() {
             .slice(0, 3)
             .map(r => r.text);
 
-          const response = await base44.functions.invoke('generateRecommendationCopy', {
-            mode: mode === 'comparison' ? 'comparison' : 'recommendation',
-            rank: index + 1,
-            user_preferences: allUserPreferences,
-            show: {
-              title: show.show_title,
-              top_matching_reasons: topMatchingReasons
-            },
-            show: {
-              title: show.show_title,
-              top_matching_reasons: topMatchingReasons
-            },
-            already_used_angles: alreadyUsedAngles,
-            language: i18n.language
-          });
+          const response = await fetch('/api/generateRecommendationCopy', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              mode: mode === 'comparison' ? 'comparison' : 'recommendation',
+              rank: index + 1,
+              user_preferences: allUserPreferences,
+              show: {
+                title: show.show_title,
+                top_matching_reasons: topMatchingReasons
+              },
+              already_used_angles: alreadyUsedAngles,
+              language: i18n.language
+            })
+          }).then(r => r.json());
 
-          if (response.data && response.data.explanation) {
+          if (response.explanation) {
             show.llm_explanation = {
-              sentence: response.data.explanation,
-              bullets: response.data.bullets || []
+              sentence: response.explanation,
+              bullets: response.bullets || []
             };
 
             // Track the angle used (extract from the explanation or reasons)
@@ -1661,85 +1663,6 @@ export default function Home() {
 
       setResults(recommendations);
       setPhase('results');
-
-      console.log('[QUIZ_FINISH] phase=adminLogging', { timestamp: Date.now() });
-
-      // Log search to admin database (non-blocking - failures here should not affect UI)
-      try {
-        const { base44 } = await import('@/api/base44Client');
-
-        // Get or create session ID
-        let sessionId = sessionStorage.getItem('quiz_session_id');
-        if (!sessionId) {
-          sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-          sessionStorage.setItem('quiz_session_id', sessionId);
-        }
-
-        const dateAnswer = Object.entries(answers).find(([qid]) => qid === 'q9_dates' || qid === 'q10_dates');
-
-        // Build LLM outputs for recommendation mode
-        let recommendationLlmOutputs = null;
-        if (mode === 'recommendation') {
-          recommendationLlmOutputs = {
-            top_recommendations: recommendations.slice(0, 3).map((r, idx) => ({
-              rank: idx + 1,
-              show_id: r.id,
-              show_title: r.show_title,
-              why_recommend_text: r.llm_explanation?.sentence || null,
-              bullets: r.llm_explanation?.bullets || [],
-              created_at: new Date().toISOString()
-            }))
-          };
-        }
-
-        // Build LLM outputs for comparison mode
-        let comparisonLlmOutputs = null;
-        if (mode === 'comparison' && recommendations.length > 0) {
-          const winner = recommendations[0];
-          const losers = recommendations.slice(1);
-
-          comparisonLlmOutputs = {
-            winner: {
-              show_id: winner.id,
-              show_title: winner.show_title,
-              why_winner_text: winner.llm_explanation?.sentence || null,
-              bullets: winner.llm_explanation?.bullets || []
-            },
-            per_loser_explanations: losers.map(loser => ({
-              loser_show_id: loser.id,
-              loser_show_title: loser.show_title,
-              compare_sentence: loser.comparison_reason || null
-            })),
-            created_at: new Date().toISOString()
-          };
-        }
-
-        // Unified admin search logging
-        const adminSearchRecord = {
-          mode: mode === 'comparison' ? 'comparison' : 'full_recommendation',
-          answers: answers,
-          selected_show_ids: mode === 'comparison' ? selectedShowIds : undefined,
-          user_start_date: dateAnswer?.[1]?.user_start_date || null,
-          user_end_date: dateAnswer?.[1]?.user_end_date || null,
-          candidates_before_filter: candidatesBeforeFilter,
-          candidates_after_filter: candidatesAfterFilter,
-          top_recommendations: recommendations.map((r, idx) => ({
-            id: r.id,
-            show_title: r.show_title,
-            total_score: r.total_score,
-            rank: idx + 1
-          })),
-          recommendation_llm_outputs: recommendationLlmOutputs,
-          comparison_llm_outputs: comparisonLlmOutputs
-        };
-
-        const createdRecord = await base44.entities.AdminSearch.create(adminSearchRecord);
-        setAdminSearchId(createdRecord.id);
-        console.log('[QUIZ_FINISH] phase=adminLoggingComplete', { timestamp: Date.now() });
-      } catch (adminError) {
-        console.error('[QUIZ_FINISH] phase=adminLoggingFailed (non-blocking)', adminError);
-        // Don't block the user experience if logging fails - this is non-critical
-      }
 
       console.log(`[QUIZ_FINISH] Success - completed at ${Date.now()}`);
 
@@ -1926,7 +1849,7 @@ export default function Home() {
     }
 
     if (mode === 'comparison') {
-      return <ComparisonResults results={results} onRetry={handleRetry} adminSearchId={adminSearchId} />;
+      return <ComparisonResults results={results} onRetry={handleRetry} />;
     }
 
     // Recommendation mode results
@@ -1952,7 +1875,6 @@ export default function Home() {
                 isMain={index === 0}
                 index={index}
                 breakdown={musical.breakdown}
-                adminSearchId={adminSearchId}
               />
             ))}
           </div>

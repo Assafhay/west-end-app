@@ -3,64 +3,16 @@ import { motion } from 'framer-motion';
 import { Clock, MapPin, ExternalLink, Sparkles, Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { base44 } from '@/api/base44Client';
 import { useTranslation } from 'react-i18next';
 import { getLocalizedValue } from '@/lib/i18nHelper';
 
-export default function RecommendationCard({ musical, reasons, isMain = false, index = 0, breakdown = null, adminSearchId }) {
+export default function RecommendationCard({ musical, reasons, isMain = false, index = 0, breakdown = null }) {
   const { t } = useTranslation();
 
   const formatDuration = (minutes) => {
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
     return `${hours}h ${mins}m`;
-  };
-
-  const handleTicketClick = async (ticketUrl, urlType, rank) => {
-    if (adminSearchId) {
-      try {
-        // Get current record
-        const record = await base44.entities.AdminSearch.get(adminSearchId);
-
-        const clickEvent = {
-          ts: new Date().toISOString(),
-          show_id: musical.id,
-          show_title: musical.show_title,
-          mode: 'recommendation',
-          url_type: urlType,
-          url: ticketUrl,
-          rank: rank
-        };
-
-        const existingClicks = record.ticket_clicks || [];
-        const existingSummary = record.ticket_click_summary || {};
-
-        const currentShowSummary = existingSummary[musical.id] || {
-          clicked: false,
-          url_type: null,
-          click_count: 0
-        };
-
-        await base44.entities.AdminSearch.update(adminSearchId, {
-          ticket_clicked: true,
-          ticket_url_type: urlType,
-          ticket_show_id: musical.id,
-          ticket_show_title: musical.show_title,
-          ticket_url_used: ticketUrl,
-          ticket_clicks: [...existingClicks, clickEvent],
-          ticket_click_summary: {
-            ...existingSummary,
-            [musical.id]: {
-              clicked: true,
-              url_type: urlType,
-              click_count: currentShowSummary.click_count + 1
-            }
-          }
-        });
-      } catch (error) {
-        console.error('Failed to track ticket click:', error);
-      }
-    }
   };
 
   const showTitle = getLocalizedValue(musical, 'show_title');
@@ -196,7 +148,6 @@ export default function RecommendationCard({ musical, reasons, isMain = false, i
                 href={ticketUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                onClick={() => handleTicketClick(ticketUrl, urlType, index + 1)}
               >
                 <ExternalLink className="w-4 h-4 me-2" />
                 {t('get_tickets')}

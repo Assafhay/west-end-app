@@ -3,11 +3,10 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { RefreshCw, ExternalLink, Trophy, MapPin, Clock } from 'lucide-react';
 import AboutRecommendation from './AboutRecommendation';
-import { base44 } from '@/api/base44Client';
 import { useTranslation } from 'react-i18next';
 import { getLocalizedValue } from '@/lib/i18nHelper';
 
-export default function ComparisonResults({ results, onRetry, adminSearchId }) {
+export default function ComparisonResults({ results, onRetry }) {
   const { t } = useTranslation();
   const winner = results[0];
   const others = results.slice(1);
@@ -17,53 +16,6 @@ export default function ComparisonResults({ results, onRetry, adminSearchId }) {
     const hours = Math.floor(minutes / 60);
     const mins = minutes % 60;
     return `${hours}h ${mins}m`;
-  };
-
-  const handleTicketClick = async (show, ticketUrl, urlType, rank) => {
-    if (adminSearchId) {
-      try {
-        // Get current record
-        const record = await base44.entities.AdminSearch.get(adminSearchId);
-
-        const clickEvent = {
-          ts: new Date().toISOString(),
-          show_id: show.id,
-          show_title: show.show_title,
-          mode: 'comparison',
-          url_type: urlType,
-          url: ticketUrl,
-          rank: rank
-        };
-
-        const existingClicks = record.ticket_clicks || [];
-        const existingSummary = record.ticket_click_summary || {};
-
-        const currentShowSummary = existingSummary[show.id] || {
-          clicked: false,
-          url_type: null,
-          click_count: 0
-        };
-
-        await base44.entities.AdminSearch.update(adminSearchId, {
-          ticket_clicked: true,
-          ticket_url_type: urlType,
-          ticket_show_id: show.id,
-          ticket_show_title: show.show_title,
-          ticket_url_used: ticketUrl,
-          ticket_clicks: [...existingClicks, clickEvent],
-          ticket_click_summary: {
-            ...existingSummary,
-            [show.id]: {
-              clicked: true,
-              url_type: urlType,
-              click_count: currentShowSummary.click_count + 1
-            }
-          }
-        });
-      } catch (error) {
-        console.error('Failed to track ticket click:', error);
-      }
-    }
   };
 
   // Helper to render a show card (used for winner)
@@ -178,7 +130,6 @@ export default function ComparisonResults({ results, onRetry, adminSearchId }) {
                   href={ticketUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() => handleTicketClick(show, ticketUrl, urlType, 1)}
                 >
                   {t('get_tickets')}
                   <ExternalLink className="w-4 h-4 ms-2" />
@@ -285,7 +236,6 @@ export default function ComparisonResults({ results, onRetry, adminSearchId }) {
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-1.5 text-sm text-[#7C2D3E] hover:underline font-medium"
-                            onClick={() => handleTicketClick(show, ticketUrl, urlType, showRank)}
                           >
                             {t('get_tickets')}
                             <ExternalLink className="w-3 h-3" />

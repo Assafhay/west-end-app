@@ -3,8 +3,7 @@ import { motion } from 'framer-motion';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Search, Filter, X, Clock, MapPin, ExternalLink, Calendar, ArrowLeft } from 'lucide-react';
-import { base44 } from '@/api/base44Client';
+import { Search, X, Clock, MapPin, ExternalLink, Calendar, ArrowLeft } from 'lucide-react';
 import ShowDetailsModal from '@/components/browse/ShowDetailsModal';
 
 const BASE_URL = "https://raw.githubusercontent.com/Assafhay/westend-data/main";
@@ -30,7 +29,6 @@ export default function BrowseShows() {
     offWestEnd: false
   });
   const [modalShow, setModalShow] = useState(null);
-  const [sessionId, setSessionId] = useState(null);
 
   useEffect(() => {
     async function loadData() {
@@ -38,19 +36,6 @@ export default function BrowseShows() {
         const musicalsRes = await fetch(`${BASE_URL}/musicals.json`).then(r => r.json());
         setMusicals(musicalsRes);
         setLoading(false);
-
-        // Create session and log mode_entered
-        const sid = `browse_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-        setSessionId(sid);
-
-        await base44.entities.BrowseSession.create({
-          session_id: sid,
-          events: [{
-            event_type: 'mode_entered',
-            ts: new Date().toISOString(),
-            payload: { mode: 'browse' }
-          }]
-        });
       } catch (error) {
         console.error('Failed to load data:', error);
         setLoading(false);
@@ -78,36 +63,6 @@ export default function BrowseShows() {
     });
     return Array.from(tagsSet).sort();
   }, [musicals]);
-
-  // Track filter changes
-  const logFilterChange = async () => {
-    if (!sessionId) return;
-    try {
-      const session = await base44.entities.BrowseSession.filter({ session_id: sessionId });
-      if (session && session.length > 0) {
-        const currentSession = session[0];
-        await base44.entities.BrowseSession.update(currentSession.id, {
-          events: [...currentSession.events, {
-            event_type: 'filter_changed',
-            ts: new Date().toISOString(),
-            payload: {
-              search_length: searchText.length,
-              selected_tags_count: selectedTags.length,
-              quick_filters_enabled: Object.values(quickFilters).filter(Boolean).length
-            }
-          }]
-        });
-      }
-    } catch (error) {
-      console.error('Failed to log filter change:', error);
-    }
-  };
-
-  useEffect(() => {
-    if (sessionId) {
-      logFilterChange();
-    }
-  }, [searchText, selectedTags, quickFilters]);
 
   // Filter musicals
   const filteredMusicals = useMemo(() => {
@@ -142,49 +97,8 @@ export default function BrowseShows() {
     });
   }, [musicals, searchText, selectedTags, quickFilters]);
 
-  const handleShowOpen = async (show) => {
+  const handleShowOpen = (show) => {
     setModalShow(show);
-
-    if (sessionId) {
-      try {
-        const session = await base44.entities.BrowseSession.filter({ session_id: sessionId });
-        if (session && session.length > 0) {
-          const currentSession = session[0];
-          await base44.entities.BrowseSession.update(currentSession.id, {
-            events: [...currentSession.events, {
-              event_type: 'show_opened',
-              ts: new Date().toISOString(),
-              payload: { show_id: show.id, show_title: show.show_title }
-            }]
-          });
-        }
-      } catch (error) {
-        console.error('Failed to log show open:', error);
-      }
-    }
-  };
-
-  const handleTicketClick = async (show, ticketUrl, urlType) => {
-    if (!sessionId) return;
-    try {
-      const session = await base44.entities.BrowseSession.filter({ session_id: sessionId });
-      if (session && session.length > 0) {
-        const currentSession = session[0];
-        await base44.entities.BrowseSession.update(currentSession.id, {
-          events: [...currentSession.events, {
-            event_type: 'ticket_clicked',
-            ts: new Date().toISOString(),
-            payload: {
-              show_id: show.id,
-              url_type: urlType,
-              url_used: ticketUrl
-            }
-          }]
-        });
-      }
-    } catch (error) {
-      console.error('Failed to log ticket click:', error);
-    }
   };
 
   const clearAllFilters = () => {
@@ -275,82 +189,55 @@ export default function BrowseShows() {
             <label className="text-sm font-medium text-slate-700 mb-2 block">{t('quick_filters')}</label>
             <div className="flex flex-wrap gap-2">
               <Badge
-                className={`cursor-pointer transition-colors ${quickFilters.familyFriendly
-                  ? 'bg-[#7C2D3E] text-white'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                  }`}
+                className={`cursor-pointer transition-colors ${quickFilters.familyFriendly ? 'bg-[#7C2D3E] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
                 onClick={() => setQuickFilters(prev => ({ ...prev, familyFriendly: !prev.familyFriendly }))}
               >
                 Family Friendly
               </Badge>
               <Badge
-                className={`cursor-pointer transition-colors ${quickFilters.funny
-                  ? 'bg-[#7C2D3E] text-white'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                  }`}
+                className={`cursor-pointer transition-colors ${quickFilters.funny ? 'bg-[#7C2D3E] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
                 onClick={() => setQuickFilters(prev => ({ ...prev, funny: !prev.funny }))}
               >
                 Funny
               </Badge>
               <Badge
-                className={`cursor-pointer transition-colors ${quickFilters.romantic
-                  ? 'bg-[#7C2D3E] text-white'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                  }`}
+                className={`cursor-pointer transition-colors ${quickFilters.romantic ? 'bg-[#7C2D3E] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
                 onClick={() => setQuickFilters(prev => ({ ...prev, romantic: !prev.romantic }))}
               >
                 Romantic
               </Badge>
               <Badge
-                className={`cursor-pointer transition-colors ${quickFilters.spectacle
-                  ? 'bg-[#7C2D3E] text-white'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                  }`}
+                className={`cursor-pointer transition-colors ${quickFilters.spectacle ? 'bg-[#7C2D3E] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
                 onClick={() => setQuickFilters(prev => ({ ...prev, spectacle: !prev.spectacle }))}
               >
                 Big Spectacle
               </Badge>
               <Badge
-                className={`cursor-pointer transition-colors ${quickFilters.easyEnglish
-                  ? 'bg-[#7C2D3E] text-white'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                  }`}
+                className={`cursor-pointer transition-colors ${quickFilters.easyEnglish ? 'bg-[#7C2D3E] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
                 onClick={() => setQuickFilters(prev => ({ ...prev, easyEnglish: !prev.easyEnglish }))}
               >
                 Easy English
               </Badge>
               <Badge
-                className={`cursor-pointer transition-colors ${quickFilters.mustSee
-                  ? 'bg-[#7C2D3E] text-white'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                  }`}
+                className={`cursor-pointer transition-colors ${quickFilters.mustSee ? 'bg-[#7C2D3E] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
                 onClick={() => setQuickFilters(prev => ({ ...prev, mustSee: !prev.mustSee }))}
               >
                 Must See
               </Badge>
               <Badge
-                className={`cursor-pointer transition-colors ${quickFilters.hiddenGem
-                  ? 'bg-[#7C2D3E] text-white'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                  }`}
+                className={`cursor-pointer transition-colors ${quickFilters.hiddenGem ? 'bg-[#7C2D3E] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
                 onClick={() => setQuickFilters(prev => ({ ...prev, hiddenGem: !prev.hiddenGem }))}
               >
                 Hidden Gem
               </Badge>
               <Badge
-                className={`cursor-pointer transition-colors ${quickFilters.tsufsFavourites
-                  ? 'bg-[#7C2D3E] text-white'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                  }`}
+                className={`cursor-pointer transition-colors ${quickFilters.tsufsFavourites ? 'bg-[#7C2D3E] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
                 onClick={() => setQuickFilters(prev => ({ ...prev, tsufsFavourites: !prev.tsufsFavourites }))}
               >
                 Tsuf's Favourites
               </Badge>
               <Badge
-                className={`cursor-pointer transition-colors ${quickFilters.offWestEnd
-                  ? 'bg-[#7C2D3E] text-white'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                  }`}
+                className={`cursor-pointer transition-colors ${quickFilters.offWestEnd ? 'bg-[#7C2D3E] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
                 onClick={() => setQuickFilters(prev => ({ ...prev, offWestEnd: !prev.offWestEnd }))}
               >
                 Off West End
@@ -490,7 +377,6 @@ export default function BrowseShows() {
                       : (show.ticket_url && show.ticket_url !== "none")
                         ? show.ticket_url
                         : null;
-                    const urlType = hasAffUrl ? "affiliate" : "direct";
 
                     return ticketUrl && (
                       <Button
@@ -502,7 +388,6 @@ export default function BrowseShows() {
                           href={ticketUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          onClick={() => handleTicketClick(show, ticketUrl, urlType)}
                         >
                           {t('tickets')}
                           <ExternalLink className="w-3 h-3 ms-1 hidden md:inline" />
@@ -521,7 +406,6 @@ export default function BrowseShows() {
           show={modalShow}
           isOpen={!!modalShow}
           onClose={() => setModalShow(null)}
-          onTicketClick={handleTicketClick}
         />
 
         {filteredMusicals.length === 0 && (

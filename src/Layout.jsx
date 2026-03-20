@@ -1,5 +1,6 @@
 import React from 'react';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
+import GoogleSignIn from '@/components/auth/GoogleSignIn';
 import { useTranslation } from 'react-i18next';
 
 export default function Layout({ children, currentPageName }) {
@@ -13,9 +14,12 @@ export default function Layout({ children, currentPageName }) {
 
       <footer className="bg-white border-t border-slate-200 py-4 mt-auto">
         <div className="max-w-4xl mx-auto px-4 text-center relative">
-          <div className="absolute top-1/2 -translate-y-1/2 end-4">
+          {/* Right side: language + sign-in */}
+          <div className="absolute top-1/2 -translate-y-1/2 end-4 flex items-center gap-2">
+            <GoogleSignIn />
             <LanguageSwitcher />
           </div>
+
           <p className="text-slate-500 text-xs sm:text-sm mb-1">
             {t('footer_made_by')}
           </p>
