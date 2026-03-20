@@ -53,7 +53,7 @@ export const getLocalizedValue = (obj, field) => {
 
         // Let's try to match known patterns or just look in all questions?
         // There are only a few questions. This is fast enough.
-        const allQuestions = i18n.getResourceBundle(currentLang, 'translation').questions;
+        const allQuestions = i18n.getResourceBundle(currentLang, 'translation')?.questions;
         if (allQuestions) {
             for (const qKey in allQuestions) {
                 if (allQuestions[qKey].answers && allQuestions[qKey].answers[obj.answer_id]) {
