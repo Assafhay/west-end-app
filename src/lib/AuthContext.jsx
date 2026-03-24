@@ -10,10 +10,14 @@ export const AuthProvider = ({ children }) => {
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
 
   useEffect(() => {
-    // Handle redirect result (after returning from Google OAuth redirect)
+    // Handle redirect result — explicitly update state in case onAuthStateChanged
+    // already fired with null before the redirect result was processed
     getRedirectResult(auth).then((result) => {
       if (result?.user) {
-        console.log('Redirect sign-in success:', result.user.email);
+        const u = result.user;
+        setUser({ id: u.uid, email: u.email, full_name: u.displayName, profile_image: u.photoURL });
+        setIsAuthenticated(true);
+        setIsLoadingAuth(false);
       }
     }).catch((error) => {
       console.error('Redirect sign-in error:', error.code, error.message);
