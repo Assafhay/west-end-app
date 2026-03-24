@@ -1975,7 +1975,7 @@ export default function Home() {
                           Sign in to see 2 more personalised suggestions
                         </p>
                         <SignInButton onSignIn={() => {
-                          // Save results to localStorage before redirect (persists across page reloads)
+                          // Save to localStorage in case redirect fallback is used
                           localStorage.setItem('pendingResults', JSON.stringify({ results, mode }));
                           return signInWithGoogle();
                         }} />

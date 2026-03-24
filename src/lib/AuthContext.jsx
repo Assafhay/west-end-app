@@ -44,8 +44,17 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const signInWithGoogle = async () => {
-    // Use redirect flow — works on all browsers and devices without popup blocking issues
-    await signInWithRedirect(auth, googleProvider);
+    try {
+      // Popup is more reliable than redirect for custom domains (avoids 3rd-party cookie issues)
+      await signInWithPopup(auth, googleProvider);
+    } catch (error) {
+      if (error.code === 'auth/popup-blocked') {
+        // Only fall back to redirect if popup is explicitly blocked
+        await signInWithRedirect(auth, googleProvider);
+      } else {
+        throw error;
+      }
+    }
   };
 
   const logout = async () => {
