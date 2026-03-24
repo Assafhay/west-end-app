@@ -76,7 +76,7 @@ export default function Home() {
   const [mode, setMode] = useState(null); // 'recommendation', 'comparison', or 'recommendation_v2'
   const [phase, setPhase] = useState('welcome'); // welcome, show_selection, quiz, results, loading
   const { t, i18n } = useTranslation();
-  const { isAuthenticated, signInWithGoogle } = useAuth();
+  const { isAuthenticated, isLoadingAuth, signInWithGoogle } = useAuth();
 
   const [selectedShowIds, setSelectedShowIds] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -84,6 +84,24 @@ export default function Home() {
   const [results, setResults] = useState([]);
   const [scoringError, setScoringError] = useState(null);
   const isSubmittingRef = React.useRef(false);
+
+  // After Google redirect login: restore saved results so user lands back on results page
+  useEffect(() => {
+    if (isLoadingAuth) return; // wait until auth state is known
+    const saved = sessionStorage.getItem('pendingResults');
+    if (saved && isAuthenticated) {
+      try {
+        const { results: savedResults, mode: savedMode } = JSON.parse(saved);
+        setResults(savedResults);
+        setMode(savedMode);
+        setPhase('results');
+      } catch (e) {
+        console.error('Failed to restore results:', e);
+      } finally {
+        sessionStorage.removeItem('pendingResults');
+      }
+    }
+  }, [isAuthenticated, isLoadingAuth]);
 
   // Load data on mount
   useEffect(() => {
@@ -1953,7 +1971,11 @@ export default function Home() {
                         <p className="text-slate-800 font-semibold text-base leading-snug">
                           Sign in to see 2 more personalised suggestions
                         </p>
-                        <SignInButton onSignIn={signInWithGoogle} />
+                        <SignInButton onSignIn={() => {
+                          // Save results before redirect so we can restore them after login
+                          sessionStorage.setItem('pendingResults', JSON.stringify({ results, mode }));
+                          return signInWithGoogle();
+                        }} />
                       </div>
                     </div>
                   )}
