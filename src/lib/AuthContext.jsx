@@ -11,8 +11,12 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     // Handle redirect result (after returning from Google OAuth redirect)
-    getRedirectResult(auth).catch((error) => {
-      console.error('Redirect sign-in error:', error);
+    getRedirectResult(auth).then((result) => {
+      if (result?.user) {
+        console.log('Redirect sign-in success:', result.user.email);
+      }
+    }).catch((error) => {
+      console.error('Redirect sign-in error:', error.code, error.message);
     });
 
     // Firebase listener — fires immediately with cached state, then on every change
@@ -36,18 +40,8 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const signInWithGoogle = async () => {
-    try {
-      // Try popup first (instant on desktop), fall back to redirect (works on mobile)
-      await signInWithPopup(auth, googleProvider);
-    } catch (error) {
-      if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
-        // Popup was blocked — fall back to redirect flow
-        await signInWithRedirect(auth, googleProvider);
-      } else {
-        console.error('Google sign-in failed:', error);
-        throw error;
-      }
-    }
+    // Use redirect flow — works on all browsers and devices without popup blocking issues
+    await signInWithRedirect(auth, googleProvider);
   };
 
   const logout = async () => {
