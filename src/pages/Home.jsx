@@ -85,27 +85,23 @@ export default function Home() {
   const [scoringError, setScoringError] = useState(null);
   const isSubmittingRef = React.useRef(false);
 
-  // After Google redirect login: restore saved results so user lands back on results page
+  // Restore results immediately on mount if returning from Google redirect
+  // Don't wait for auth — the cards unlock automatically once isAuthenticated resolves
   useEffect(() => {
-    if (isLoadingAuth) return; // wait until Firebase auth state is resolved
-    if (!isAuthenticated) return; // only restore when logged in
-
     const saved = localStorage.getItem('pendingResults');
     if (!saved) return;
-
+    localStorage.removeItem('pendingResults');
     try {
       const { results: savedResults, mode: savedMode } = JSON.parse(saved);
-      if (savedResults && savedResults.length > 0) {
+      if (Array.isArray(savedResults) && savedResults.length > 0) {
         setResults(savedResults);
         setMode(savedMode);
         setPhase('results');
       }
     } catch (e) {
-      console.error('Failed to restore results:', e);
-    } finally {
-      localStorage.removeItem('pendingResults');
+      console.error('Failed to restore results after redirect:', e);
     }
-  }, [isAuthenticated, isLoadingAuth]);
+  }, []); // runs once on mount only
 
   // Load data on mount
   useEffect(() => {
