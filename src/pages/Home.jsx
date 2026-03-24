@@ -20,6 +20,7 @@ import { RefreshCw } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { getLocalizedValue } from '@/lib/i18nHelper';
 import { useAuth } from '@/lib/AuthContext';
+import { saveQuizResult } from '@/lib/saveQuizResult';
 
 const BASE_URL = "https://raw.githubusercontent.com/Assafhay/westend-data/main";
 
@@ -1748,6 +1749,9 @@ export default function Home() {
 
       setResults(recommendations);
       setPhase('results');
+
+      // Save to Firestore (only if user is logged in, non-blocking)
+      saveQuizResult({ user, answers, results: recommendations, mode });
 
       console.log(`[QUIZ_FINISH] Success - completed at ${Date.now()}`);
 
