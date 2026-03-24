@@ -85,8 +85,10 @@ export default function Home() {
   const [scoringError, setScoringError] = useState(null);
   const isSubmittingRef = React.useRef(false);
 
+  // Track if user just returned from Google redirect — treat as authenticated immediately
+  const [returnedFromLogin, setReturnedFromLogin] = useState(false);
+
   // Restore results immediately on mount if returning from Google redirect
-  // Don't wait for auth — the cards unlock automatically once isAuthenticated resolves
   useEffect(() => {
     const saved = localStorage.getItem('pendingResults');
     if (!saved) return;
@@ -97,6 +99,7 @@ export default function Home() {
         setResults(savedResults);
         setMode(savedMode);
         setPhase('results');
+        setReturnedFromLogin(true); // user just came back from Google — skip blur immediately
       }
     } catch (e) {
       console.error('Failed to restore results after redirect:', e);
@@ -1950,7 +1953,7 @@ export default function Home() {
 
           <div className="space-y-6">
             {results.map((musical, index) => {
-              const isLocked = !isAuthenticated && index > 0;
+              const isLocked = !isAuthenticated && !returnedFromLogin && index > 0;
               return (
                 <div key={musical.id} className="relative">
                   {/* Card — blurred when locked */}
