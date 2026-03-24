@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { onAuthStateChanged, signInWithPopup, signOut } from 'firebase/auth';
+import { onAuthStateChanged, signInWithPopup, signInWithRedirect, getRedirectResult, signOut } from 'firebase/auth';
 import { auth, googleProvider } from '@/lib/firebase';
 
 const AuthContext = createContext();
@@ -10,6 +10,11 @@ export const AuthProvider = ({ children }) => {
   const [isLoadingAuth, setIsLoadingAuth] = useState(true);
 
   useEffect(() => {
+    // Handle redirect result (after returning from Google OAuth redirect)
+    getRedirectResult(auth).catch((error) => {
+      console.error('Redirect sign-in error:', error);
+    });
+
     // Firebase listener — fires immediately with cached state, then on every change
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       if (firebaseUser) {
@@ -32,10 +37,16 @@ export const AuthProvider = ({ children }) => {
 
   const signInWithGoogle = async () => {
     try {
+      // Try popup first (instant on desktop), fall back to redirect (works on mobile)
       await signInWithPopup(auth, googleProvider);
     } catch (error) {
-      console.error('Google sign-in failed:', error);
-      throw error;
+      if (error.code === 'auth/popup-blocked' || error.code === 'auth/popup-closed-by-user') {
+        // Popup was blocked — fall back to redirect flow
+        await signInWithRedirect(auth, googleProvider);
+      } else {
+        console.error('Google sign-in failed:', error);
+        throw error;
+      }
     }
   };
 

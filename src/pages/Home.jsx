@@ -1895,7 +1895,7 @@ export default function Home() {
               return (
                 <div key={musical.id} className="relative">
                   {/* Card — blurred when locked */}
-                  <div className={isLocked ? 'blur-sm pointer-events-none select-none' : ''}>
+                  <div className={isLocked ? 'blur-3xl pointer-events-none select-none' : ''}>
                     <RecommendationCard
                       musical={musical}
                       reasons={musical.reasons}
