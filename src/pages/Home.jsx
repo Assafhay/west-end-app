@@ -77,7 +77,7 @@ export default function Home() {
   const [mode, setMode] = useState(null); // 'recommendation', 'comparison', or 'recommendation_v2'
   const [phase, setPhase] = useState('welcome'); // welcome, show_selection, quiz, results, loading
   const { t, i18n } = useTranslation();
-  const { isAuthenticated, isLoadingAuth, signInWithGoogle } = useAuth();
+  const { user, isAuthenticated, isLoadingAuth, signInWithGoogle } = useAuth();
 
   const [selectedShowIds, setSelectedShowIds] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
