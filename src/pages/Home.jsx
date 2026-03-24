@@ -87,19 +87,23 @@ export default function Home() {
 
   // After Google redirect login: restore saved results so user lands back on results page
   useEffect(() => {
-    if (isLoadingAuth) return; // wait until auth state is known
-    const saved = sessionStorage.getItem('pendingResults');
-    if (saved && isAuthenticated) {
-      try {
-        const { results: savedResults, mode: savedMode } = JSON.parse(saved);
+    if (isLoadingAuth) return; // wait until Firebase auth state is resolved
+    if (!isAuthenticated) return; // only restore when logged in
+
+    const saved = localStorage.getItem('pendingResults');
+    if (!saved) return;
+
+    try {
+      const { results: savedResults, mode: savedMode } = JSON.parse(saved);
+      if (savedResults && savedResults.length > 0) {
         setResults(savedResults);
         setMode(savedMode);
         setPhase('results');
-      } catch (e) {
-        console.error('Failed to restore results:', e);
-      } finally {
-        sessionStorage.removeItem('pendingResults');
       }
+    } catch (e) {
+      console.error('Failed to restore results:', e);
+    } finally {
+      localStorage.removeItem('pendingResults');
     }
   }, [isAuthenticated, isLoadingAuth]);
 
@@ -1972,8 +1976,8 @@ export default function Home() {
                           Sign in to see 2 more personalised suggestions
                         </p>
                         <SignInButton onSignIn={() => {
-                          // Save results before redirect so we can restore them after login
-                          sessionStorage.setItem('pendingResults', JSON.stringify({ results, mode }));
+                          // Save results to localStorage before redirect (persists across page reloads)
+                          localStorage.setItem('pendingResults', JSON.stringify({ results, mode }));
                           return signInWithGoogle();
                         }} />
                       </div>
