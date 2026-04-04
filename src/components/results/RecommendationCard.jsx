@@ -17,7 +17,7 @@ function renderSentenceWithBoldTitle(sentence, title) {
 }
 
 export default function RecommendationCard({ musical, reasons, isMain = false, index = 0, breakdown = null }) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const formatDuration = (minutes) => {
     const hours = Math.floor(minutes / 60);
@@ -140,7 +140,7 @@ export default function RecommendationCard({ musical, reasons, isMain = false, i
                 variant="secondary"
                 className="bg-slate-100 text-slate-600 hover:bg-slate-200 text-xs"
               >
-                {tag}
+                {i18n.language === 'he' ? t(`tag_map.${tag}`, tag) : tag}
               </Badge>
             ))}
           </div>

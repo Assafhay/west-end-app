@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { getLocalizedValue } from '@/lib/i18nHelper';
 
 export default function BrowseShows() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [musicals, setMusicals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -353,7 +353,7 @@ export default function BrowseShows() {
                       <div className="flex flex-wrap gap-1 mb-2 md:mb-3">
                         {tags.slice(0, 2).map((tag, i) => (
                           <Badge key={i} variant="secondary" className="text-xs line-clamp-1">
-                            {tag}
+                            {i18n.language === 'he' ? t(`tag_map.${tag}`, tag) : tag}
                           </Badge>
                         ))}
                         {tags.length > 2 && (
