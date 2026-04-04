@@ -7,7 +7,7 @@ const LanguageSwitcher = () => {
     const { i18n } = useTranslation();
 
     const toggleLanguage = () => {
-        const newLang = i18n.language === 'en' ? 'he' : 'en';
+        const newLang = i18n.language.startsWith('en') ? 'he' : 'en';
         i18n.changeLanguage(newLang);
     };
 
@@ -28,7 +28,7 @@ const LanguageSwitcher = () => {
             className="flex items-center gap-2"
         >
             <Globe className="w-4 h-4" />
-            {i18n.language === 'en' ? 'עברית' : 'English'}
+            {i18n.language.startsWith('en') ? 'עברית' : 'English'}
         </Button>
     );
 };

@@ -6,6 +6,16 @@ import { Badge } from '@/components/ui/badge';
 import { useTranslation } from 'react-i18next';
 import { getLocalizedValue } from '@/lib/i18nHelper';
 
+// Bolds the show title in a sentence without dangerouslySetInnerHTML.
+// Splits on the title string and wraps matches in <strong>.
+function renderSentenceWithBoldTitle(sentence, title) {
+  if (!title) return sentence;
+  const parts = sentence.split(new RegExp(`(${title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'g'));
+  return parts.map((part, i) =>
+    part === title ? <strong key={i}>{part}</strong> : part
+  );
+}
+
 export default function RecommendationCard({ musical, reasons, isMain = false, index = 0, breakdown = null }) {
   const { t } = useTranslation();
 
@@ -17,8 +27,62 @@ export default function RecommendationCard({ musical, reasons, isMain = false, i
 
   const showTitle = getLocalizedValue(musical, 'show_title');
   const showDescription = getLocalizedValue(musical, 'description');
-  const showTags = getLocalizedValue(musical, 'tags') || musical.tags; // Fallback if tags not localized yet (often arrays need special handling or just assumed same)
-  // Note: tags are currently just strings, so if we want localized tags we'd need tags_he: ["...", "..."]
+  const rawTags = getLocalizedValue(musical, 'tags') || musical.tags;
+  const showTags = Array.isArray(rawTags)
+    ? rawTags
+    : (typeof rawTags === 'string' ? rawTags.split(',').map(tag => tag.trim()).filter(Boolean) : []);
+
+  // --- Type-guarded LLM content ---
+  const rawSentence = musical.llm_explanation?.sentence;
+  const safeSentence = typeof rawSentence === 'string' ? rawSentence.replace(/\*/g, '') : null;
+  const rawBullets = musical.llm_explanation?.bullets;
+  const safeBullets = Array.isArray(rawBullets)
+    ? rawBullets.filter(b => typeof b === 'string')
+    : [];
+
+  const renderWhySection = () => {
+    if (safeSentence) {
+      return (
+        <div className="space-y-2">
+          <p className="text-sm text-slate-700 leading-relaxed">
+            {renderSentenceWithBoldTitle(safeSentence, showTitle)}
+          </p>
+          {safeBullets.length > 0 && (
+            <ul className="space-y-1.5 mt-2">
+              {safeBullets.map((bullet, idx) => (
+                <li key={idx} className="flex items-start gap-2 text-sm text-slate-600">
+                  <Check className="w-4 h-4 text-[#D4A959] flex-shrink-0 mt-0.5" />
+                  <span>{bullet}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      );
+    }
+
+    if (reasons && reasons.length > 0) {
+      const positiveReasons = reasons.filter(r => r.points > 0);
+      return (
+        <ul className="space-y-1.5">
+          {positiveReasons.slice(0, 3).map((reason, i) => (
+            <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
+              <Check className="w-4 h-4 text-[#D4A959] flex-shrink-0 mt-0.5" />
+              <span>{reason.text}</span>
+            </li>
+          ))}
+          {positiveReasons.length === 0 && (
+            <li className="flex items-start gap-2 text-sm text-slate-700">
+              <Check className="w-4 h-4 text-[#D4A959] flex-shrink-0 mt-0.5" />
+              <span>{t('matches_preferences')}</span>
+            </li>
+          )}
+        </ul>
+      );
+    }
+
+    return <p className="text-sm text-slate-700">{t('great_match')}</p>;
+  };
 
   return (
     <motion.div
@@ -64,7 +128,7 @@ export default function RecommendationCard({ musical, reasons, isMain = false, i
           </div>
         </div>
 
-        <p className="text-slate-600 text-sm leading-relaxed">
+        <p className="text-slate-600 text-sm leading-relaxed line-clamp-3">
           {showDescription}
         </p>
 
@@ -83,50 +147,11 @@ export default function RecommendationCard({ musical, reasons, isMain = false, i
         )}
 
         <div className="bg-[#FAFAF8] rounded-2xl p-4 space-y-3">
-          {/* User-facing positive reasons only */}
           <div>
             <p className="text-xs font-semibold text-[#7C2D3E] uppercase tracking-wider mb-2">
               {t('why_we_recommend')}
             </p>
-
-            {musical.llm_explanation ? (
-              <div className="space-y-2">
-                <p className="text-sm text-slate-700 leading-relaxed">
-                  <span dangerouslySetInnerHTML={{
-                    __html: musical.llm_explanation.sentence
-                      .replace(/\*/g, '')
-                      .replace(new RegExp(showTitle, 'g'), `<strong>${showTitle}</strong>`)
-                  }} />
-                </p>
-                {musical.llm_explanation.bullets && musical.llm_explanation.bullets.length > 0 && (
-                  <ul className="space-y-1.5 mt-2">
-                    {musical.llm_explanation.bullets.map((bullet, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-sm text-slate-600">
-                        <Check className="w-4 h-4 text-[#D4A959] flex-shrink-0 mt-0.5" />
-                        <span>{bullet}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            ) : reasons && reasons.length > 0 ? (
-              <ul className="space-y-1.5">
-                {reasons.filter(r => r.points > 0).slice(0, 3).map((reason, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-slate-700">
-                    <Check className="w-4 h-4 text-[#D4A959] flex-shrink-0 mt-0.5" />
-                    <span>{reason.text}</span>
-                  </li>
-                ))}
-                {reasons.filter(r => r.points > 0).length === 0 && (
-                  <li className="flex items-start gap-2 text-sm text-slate-700">
-                    <Check className="w-4 h-4 text-[#D4A959] flex-shrink-0 mt-0.5" />
-                    <span>{t('matches_preferences')}</span>
-                  </li>
-                )}
-              </ul>
-            ) : (
-              <p className="text-sm text-slate-700">{t('great_match')}</p>
-            )}
+            {renderWhySection()}
           </div>
         </div>
 
@@ -137,7 +162,6 @@ export default function RecommendationCard({ musical, reasons, isMain = false, i
             : (musical.ticket_url && musical.ticket_url !== "none")
               ? musical.ticket_url
               : null;
-          const urlType = hasAffUrl ? "affiliate" : "direct";
 
           return ticketUrl && (
             <Button

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Search, X, Clock, MapPin, ExternalLink, Calendar, ArrowLeft } from 'lucide-react';
+import { Search, X, Clock, MapPin, ExternalLink, Calendar, ArrowLeft, ArrowUp } from 'lucide-react';
 import ShowDetailsModal from '@/components/browse/ShowDetailsModal';
 
 const BASE_URL = "https://raw.githubusercontent.com/Assafhay/westend-data/main";
@@ -15,6 +15,13 @@ export default function BrowseShows() {
   const { t } = useTranslation();
   const [musicals, setMusicals] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setShowScrollTop(window.scrollY > 400);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
   const [searchText, setSearchText] = useState('');
   const [selectedTags, setSelectedTags] = useState([]);
   const [quickFilters, setQuickFilters] = useState({
@@ -136,17 +143,17 @@ export default function BrowseShows() {
 
     // Check if close_date is placeholder or missing
     if (!closeDate || closeDate === '2099-12-31') {
-      return `From ${start}`;
+      return t('from_date', { date: start });
     }
 
     const end = formatDate(closeDate);
-    return `${start} – ${end}`;
+    return t('date_range', { start, end });
   };
 
   if (loading) {
     return (
       <div className="bg-gradient-to-br from-[#FAFAF8] via-white to-[#F5F0EB] min-h-screen flex items-center justify-center">
-        <p className="text-slate-600">Loading shows...</p>
+        <p className="text-slate-600">{t('loading_shows_browse')}</p>
       </div>
     );
   }
@@ -192,55 +199,55 @@ export default function BrowseShows() {
                 className={`cursor-pointer transition-colors ${quickFilters.familyFriendly ? 'bg-[#7C2D3E] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
                 onClick={() => setQuickFilters(prev => ({ ...prev, familyFriendly: !prev.familyFriendly }))}
               >
-                Family Friendly
+                {t('filter_family_friendly')}
               </Badge>
               <Badge
                 className={`cursor-pointer transition-colors ${quickFilters.funny ? 'bg-[#7C2D3E] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
                 onClick={() => setQuickFilters(prev => ({ ...prev, funny: !prev.funny }))}
               >
-                Funny
+                {t('filter_funny')}
               </Badge>
               <Badge
                 className={`cursor-pointer transition-colors ${quickFilters.romantic ? 'bg-[#7C2D3E] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
                 onClick={() => setQuickFilters(prev => ({ ...prev, romantic: !prev.romantic }))}
               >
-                Romantic
+                {t('filter_romantic')}
               </Badge>
               <Badge
                 className={`cursor-pointer transition-colors ${quickFilters.spectacle ? 'bg-[#7C2D3E] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
                 onClick={() => setQuickFilters(prev => ({ ...prev, spectacle: !prev.spectacle }))}
               >
-                Big Spectacle
+                {t('filter_spectacle')}
               </Badge>
               <Badge
                 className={`cursor-pointer transition-colors ${quickFilters.easyEnglish ? 'bg-[#7C2D3E] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
                 onClick={() => setQuickFilters(prev => ({ ...prev, easyEnglish: !prev.easyEnglish }))}
               >
-                Easy English
+                {t('filter_easy_english')}
               </Badge>
               <Badge
                 className={`cursor-pointer transition-colors ${quickFilters.mustSee ? 'bg-[#7C2D3E] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
                 onClick={() => setQuickFilters(prev => ({ ...prev, mustSee: !prev.mustSee }))}
               >
-                Must See
+                {t('filter_must_see')}
               </Badge>
               <Badge
                 className={`cursor-pointer transition-colors ${quickFilters.hiddenGem ? 'bg-[#7C2D3E] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
                 onClick={() => setQuickFilters(prev => ({ ...prev, hiddenGem: !prev.hiddenGem }))}
               >
-                Hidden Gem
+                {t('filter_hidden_gem')}
               </Badge>
               <Badge
                 className={`cursor-pointer transition-colors ${quickFilters.tsufsFavourites ? 'bg-[#7C2D3E] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
                 onClick={() => setQuickFilters(prev => ({ ...prev, tsufsFavourites: !prev.tsufsFavourites }))}
               >
-                Tsuf's Favourites
+                {t('filter_tsufs_faves')}
               </Badge>
               <Badge
                 className={`cursor-pointer transition-colors ${quickFilters.offWestEnd ? 'bg-[#7C2D3E] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
                 onClick={() => setQuickFilters(prev => ({ ...prev, offWestEnd: !prev.offWestEnd }))}
               >
-                Off West End
+                {t('filter_off_west_end')}
               </Badge>
             </div>
           </div>
@@ -254,7 +261,7 @@ export default function BrowseShows() {
               className="gap-2"
             >
               <X className="w-4 h-4" />
-              Clear All Filters
+              {t('clear_all_filters')}
             </Button>
           )}
         </div>
@@ -296,12 +303,12 @@ export default function BrowseShows() {
                 <div className="absolute top-2 end-2 flex flex-col gap-1 pointer-events-none">
                   {show.status === "future" && (
                     <span className="inline-flex items-center rounded-md px-2.5 py-0.5 text-xs font-semibold text-slate-900 shadow-md" style={{ backgroundColor: '#FFEAB2' }}>
-                      Opening soon
+                      {t('opening_soon')}
                     </span>
                   )}
                   {show.closing_soon && (
                     <span className="inline-flex items-center rounded-md px-2.5 py-0.5 text-xs font-semibold text-slate-900 shadow-md" style={{ backgroundColor: '#FFEAB2' }}>
-                      Closing soon
+                      {t('closing_soon')}
                     </span>
                   )}
                 </div>
@@ -330,7 +337,7 @@ export default function BrowseShows() {
                     {show.start_date && (
                       <div className="flex items-center gap-1">
                         <Calendar className="w-3 h-3 flex-shrink-0" />
-                        <span className="text-xs">{formatDateRange(show.start_date, show.close_date)}</span>
+                        <span className="text-xs" dir="ltr">{formatDateRange(show.start_date, show.close_date)}</span>
                       </div>
                     )}
                   </div>
@@ -407,6 +414,22 @@ export default function BrowseShows() {
           isOpen={!!modalShow}
           onClose={() => setModalShow(null)}
         />
+
+        {/* Scroll to top */}
+        <AnimatePresence>
+          {showScrollTop && (
+            <motion.button
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="fixed bottom-6 end-6 z-50 w-12 h-12 rounded-full bg-[#7C2D3E] text-white shadow-lg flex items-center justify-center hover:bg-[#6B2635] transition-colors"
+              aria-label="Scroll to top"
+            >
+              <ArrowUp className="w-5 h-5" />
+            </motion.button>
+          )}
+        </AnimatePresence>
 
         {filteredMusicals.length === 0 && (
           <div className="text-center py-12">

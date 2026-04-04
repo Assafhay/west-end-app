@@ -105,6 +105,25 @@ const resources = {
       "start_over_fresh": "Start Over",
       "select_more_options": "You can select {{count}} more option{{plural}}",
       "max_selections_reached": "Maximum selections reached",
+      "quiz_progress": "Question {{current}} of {{total}}",
+      "sign_in_to_see_more": "Sign in to see {{count}} more personalised suggestions",
+      "continue_with_google": "Continue with Google",
+      "redirecting_to_google": "Redirecting to Google…",
+      "sign_in_failed": "Sign-in failed. Please try again.",
+      "date_range": "{{start}} – {{end}}",
+      "opening_soon": "Opening soon",
+      "closing_soon": "Closing soon",
+      "loading_shows_browse": "Loading shows...",
+      "clear_all_filters": "Clear All Filters",
+      "filter_family_friendly": "Family Friendly",
+      "filter_funny": "Funny",
+      "filter_romantic": "Romantic",
+      "filter_spectacle": "Big Spectacle",
+      "filter_easy_english": "Easy English",
+      "filter_must_see": "Must See",
+      "filter_hidden_gem": "Hidden Gem",
+      "filter_tsufs_faves": "Tsuf's Favourites",
+      "filter_off_west_end": "Off West End",
 
       // Field Preferences
       "preference": {
@@ -356,6 +375,25 @@ const resources = {
       "start_over_fresh": "התחל מחדש",
       "select_more_options": "ניתן לבחור עוד {{count}} אפשרויות",
       "max_selections_reached": "הגעת למקסימום הבחירות",
+      "quiz_progress": "שאלה {{current}} מתוך {{total}}",
+      "sign_in_to_see_more": "היכנסי כדי לראות עוד {{count}} המלצות מותאמות אישית",
+      "continue_with_google": "המשך עם Google",
+      "redirecting_to_google": "מועבר/ת לגוגל...",
+      "sign_in_failed": "ההתחברות נכשלה. אנא נסי שוב.",
+      "date_range": "{{start}} – {{end}}",
+      "opening_soon": "בקרוב",
+      "closing_soon": "נסגר בקרוב",
+      "loading_shows_browse": "טוען הצגות...",
+      "clear_all_filters": "נקה כל הסינונים",
+      "filter_family_friendly": "ידידותי למשפחה",
+      "filter_funny": "מצחיק",
+      "filter_romantic": "רומנטי",
+      "filter_spectacle": "ראווה גדולה",
+      "filter_easy_english": "אנגלית קלה",
+      "filter_must_see": "חובה לראות",
+      "filter_hidden_gem": "פנינה נסתרת",
+      "filter_tsufs_faves": "המועדפות של צוף",
+      "filter_off_west_end": "אוף ווסט אנד",
 
       // Field Preferences
       "preference": {
@@ -579,7 +617,8 @@ i18n
   .init({
     resources,
     fallbackLng: 'en',
-    debug: true,
+    load: 'languageOnly',   // normalises 'en-US' → 'en', 'he-IL' → 'he'
+    debug: false,
     interpolation: {
       escapeValue: false,
     },

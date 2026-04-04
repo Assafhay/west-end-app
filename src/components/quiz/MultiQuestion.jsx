@@ -25,13 +25,6 @@ export default function MultiQuestion({ question, selectedAnswers = [], onSelect
 
   return (
     <div className="space-y-3">
-      <p className="text-sm text-slate-500 mb-4">
-        {remainingSelections > 0
-          ? t('select_multiple')
-          : t('limit_reached') || 'Maximum selections reached'
-        }
-      </p>
-
       {answers.map((answer, index) => {
         const isSelected = selectedAnswers.includes(answer.answer_id);
         const isDisabled = !isSelected && selectedAnswers.length >= maxSelections;

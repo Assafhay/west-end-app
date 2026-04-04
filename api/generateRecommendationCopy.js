@@ -35,12 +35,27 @@ export default async function handler(req, res) {
 
     // ── recommendation ──────────────────────────────────────────────────────
     if (mode === 'recommendation') {
-      const { rank, user_preferences, show, already_used_angles } = payload;
+      const { rank, user_preferences, show, already_used_angles, language = 'en' } = payload;
 
-      const systemPrompt = `You are a warm, knowledgeable West End theatre concierge writing personalised show recommendations.
+      const isHebrew = language === 'he';
+
+      const systemPrompt = isHebrew
+        ? `את יועצת תיאטרון מוזיקלי ישראלית, חברה של המשתמשת, כותבת המלצות בעברית ישראלית יומיומית ונשית.
+
+כללים:
+- כתבי 2–3 משפטים בעברית ישראלית קולוקוויאלית, בגוף נקבה.
+- היי ספציפית וחיה — אזכרי משהו קונקרטי על ההצגה הזאת.
+- חברי בין האיכויות של ההצגה להעדפות של המשתמשת.
+- כל המלצה חייבת להישמע שונה מהאחרות — שני את הזווית וניסוח.
+- אסור לאזכר ניקוד, משקלים, לוגיקת דירוג, או המילה "אלגוריתם".
+- אל תתחילי עם "ההצגה הזו" או "המחזמר הזה" — השתמשי בשם ההצגה או פתיחה רעננה.
+- אל תמציאי עובדות שלא קיימות בנתוני ההצגה.
+- אסור: אימוג'ים, הרבה סימני קריאה, "וואו", "ממש", "מדהים" כמילים ריקות.
+- טון: חמה, נלהבת אבל לא מוגזמת.`
+        : `You are a warm, knowledgeable West End theatre concierge writing personalised show recommendations.
 
 Rules:
-- Write 2 sentences maximum. Be specific and vivid — mention something concrete about THIS show.
+- Write 2–3 sentences maximum. Be specific and vivid — mention something concrete about THIS show.
 - Connect the show's actual qualities (description, tags, attributes) to the user's preferences.
 - Each recommendation must sound different from the others — vary the angle and phrasing.
 - Do NOT mention scores, weights, ranking logic, or the word "algorithm".
@@ -63,7 +78,7 @@ Why it matches (top reasons): ${topReasonsText || 'strong overall match'}
 Rank: #${rank} of 3 recommendations
 Angles already used in higher-ranked recommendations (avoid repeating): ${usedAnglesText}
 
-Write 1–2 specific, vivid sentences explaining why ${show.title} was recommended for this person.`;
+${isHebrew ? `כתבי 2–3 משפטים ספציפיים ותוססים בעברית ישראלית יומיומית המסבירים למה ${show.title} הומלצה לאדם הזה.` : `Write 2–3 specific, vivid sentences explaining why ${show.title} was recommended for this person.`}`;
 
       try {
         const explanation = await callClaude(systemPrompt, userPrompt, false);
@@ -79,9 +94,15 @@ Write 1–2 specific, vivid sentences explaining why ${show.title} was recommend
 
     // ── comparison_full ──────────────────────────────────────────────────────
     if (mode === 'comparison_full') {
-      const { winner, loser, user_preferences, candidates, forbidden_angles } = payload;
+      const { winner, loser, user_preferences, candidates, forbidden_angles, language = 'en' } = payload;
+      const isHebrew = language === 'he';
 
-      const systemPrompt = `You write ONE sentence comparing two musicals for a user.
+      const systemPrompt = isHebrew
+        ? `את כותבת משפט אחד בעברית ישראלית יומיומית, בגוף נקבה, המשווה בין שני מחזות זמר.
+- בחרי זווית אחת בדיוק מרשימת המועמדים.
+- אל תשתמשי בזווית שמופיעה ב-forbidden_angles.
+- אזכרי את שמות שתי ההצגות. פלטי משפט אחד בלבד.`
+        : `You write ONE sentence comparing two musicals for a user.
 - Pick exactly ONE angle from the candidates list.
 - Do NOT use any angle_id listed in forbidden_angles.
 - Mention both show titles. Output ONE sentence only.`;

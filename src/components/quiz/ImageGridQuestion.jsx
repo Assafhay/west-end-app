@@ -33,7 +33,7 @@ export default function ImageGridQuestion({ question, selectedAnswers = [], onSe
           // Lookup musical data from musicals.json
           const musical = musicalsById[answer.answer_id];
           const img = musical?.img ?? null;
-          const title = getLocalizedValue(musical, 'show_title') ?? getLocalizedValue(answer, 'answer_text');
+          const title = getLocalizedValue(musical, 'show_title') || getLocalizedValue(answer, 'answer_text') || answer.answer_text;
 
           // Log warning if image is missing
           if (!img && musical) {

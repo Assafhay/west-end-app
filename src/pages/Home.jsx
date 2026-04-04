@@ -27,6 +27,7 @@ const BASE_URL = "https://raw.githubusercontent.com/Assafhay/westend-data/main";
 function SignInButton({ onSignIn }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const { t } = useTranslation();
 
   const handleClick = async () => {
     setLoading(true);
@@ -34,7 +35,7 @@ function SignInButton({ onSignIn }) {
     try {
       await onSignIn();
     } catch (err) {
-      setError('Sign-in failed. Please try again.');
+      setError(t('sign_in_failed'));
       console.error('Sign-in error:', err.code, err.message);
     } finally {
       setLoading(false);
@@ -58,7 +59,7 @@ function SignInButton({ onSignIn }) {
             <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
           </svg>
         )}
-        {loading ? 'Redirecting to Google…' : 'Continue with Google'}
+        {loading ? t('redirecting_to_google') : t('continue_with_google')}
       </button>
       {error && <p className="text-red-500 text-xs text-center">{error}</p>}
     </div>
@@ -451,8 +452,11 @@ export default function Home() {
       };
     });
 
-    // Step 4: Sort by score
+    // Step 4: Sort by score (opening-soon shows always last)
     scoredMusicals.sort((a, b) => {
+      const aFuture = a.status === 'future' ? 1 : 0;
+      const bFuture = b.status === 'future' ? 1 : 0;
+      if (aFuture !== bFuture) return aFuture - bFuture;
       if (b.total_score !== a.total_score) return b.total_score - a.total_score;
       return a.show_title.localeCompare(b.show_title);
     });
@@ -831,9 +835,14 @@ export default function Home() {
       };
     });
 
-    // Step 5: Sort results
+    // Step 5: Sort results (opening-soon shows always last)
     // In comparison mode, prioritize shows that passed all filters
     scoredMusicals.sort((a, b) => {
+      // Opening-soon shows always go to the bottom
+      const aFuture = a.status === 'future' ? 1 : 0;
+      const bFuture = b.status === 'future' ? 1 : 0;
+      if (aFuture !== bFuture) return aFuture - bFuture;
+
       // In comparison mode, prioritize shows that passed filters
       if (candidateShowIds) {
         if (a.passed_all_filters !== b.passed_all_filters) {
@@ -1976,7 +1985,7 @@ export default function Home() {
                     <div className="absolute inset-0 flex flex-col items-center justify-center rounded-3xl bg-white/60 backdrop-blur-sm z-10 px-6 text-center gap-4">
                       <div className="bg-white rounded-2xl shadow-lg px-8 py-6 flex flex-col items-center gap-4 max-w-xs w-full">
                         <p className="text-slate-800 font-semibold text-base leading-snug">
-                          Sign in to see 2 more personalised suggestions
+                          {t('sign_in_to_see_more', { count: 2 })}
                         </p>
                         <SignInButton onSignIn={() => {
                           // Save to localStorage in case redirect fallback is used
@@ -2097,7 +2106,9 @@ export default function Home() {
                 <ImageGridQuestion
                   question={{
                     ...currentQuestion,
-                    answers: musicals.map(m => ({ answer_id: m.id, answer_text: m.show_title }))
+                    answers: musicals
+                      .filter(m => m.status !== 'future')
+                      .map(m => ({ answer_id: m.id, answer_text: m.show_title }))
                   }}
                   selectedAnswers={answers[currentQuestion.question_id] || []}
                   onSelect={handleAnswerSelect}
