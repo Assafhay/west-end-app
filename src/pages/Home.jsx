@@ -2031,7 +2031,7 @@ export default function Home() {
 
   // Quiz phase
   return (
-    <div className="bg-gradient-to-br from-[#FAFAF8] via-white to-[#F5F0EB] h-screen overflow-hidden flex flex-col">
+    <div className="bg-gradient-to-br from-[#FAFAF8] via-white to-[#F5F0EB] fixed inset-0 overflow-hidden flex flex-col z-10">
       <QuizProgress current={currentQuestionIndex} total={filteredQuestions.length} />
 
       {/* Scrollable content area — full height minus progress bar and fixed nav */}
