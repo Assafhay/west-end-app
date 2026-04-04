@@ -2031,10 +2031,12 @@ export default function Home() {
 
   // Quiz phase
   return (
-    <div className="bg-gradient-to-br from-[#FAFAF8] via-white to-[#F5F0EB] pb-8">
+    <div className="bg-gradient-to-br from-[#FAFAF8] via-white to-[#F5F0EB] h-screen overflow-hidden flex flex-col">
       <QuizProgress current={currentQuestionIndex} total={filteredQuestions.length} />
 
-      <div className="max-w-lg mx-auto px-4 py-6">
+      {/* Scrollable content area — full height minus progress bar and fixed nav */}
+      <div className="flex-1 overflow-y-auto pb-28">
+        <div className="max-w-lg mx-auto px-4 py-6">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentQuestionIndex}
@@ -2127,6 +2129,7 @@ export default function Home() {
             )}
           </motion.div>
         </AnimatePresence>
+        </div>
       </div>
 
       <QuizNavigation
