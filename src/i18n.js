@@ -567,6 +567,46 @@ const resources = {
             "many": "ראיתי מלא!"
           }
         },
+        "q2_english": {
+          "question_text": "עד כמה אתם נוחים עם אנגלית?",
+          "answers": {
+            "native_or_fluent": "נוח מאוד / שוטף",
+            "ok_but_not_perfect": "בסדר, לא מושלם",
+            "basic": "אנגלית בסיסית"
+          }
+        },
+        "q3_mood": {
+          "question_text": "במה אתם במצב רוח?",
+          "answers": {
+            "laugh": "אני רוצה לצחוק",
+            "feel_good": "נעים ומרומם",
+            "epic_emotional": "לראות משהו אפי ולהתרגש",
+            "dark_intense": "אני בצד האפל והאינטנסיבי"
+          }
+        },
+        "q4_focus": {
+          "question_text": "מה חשוב לכם יותר?",
+          "answers": {
+            "big_spectacle": "ראווה גדולה",
+            "strong_story": "סיפור חזק",
+            "no_preference": "אין לי העדפה"
+          }
+        },
+        "q5_music": {
+          "question_text": "איזה סוג מוזיקה אתם מעדיפים?",
+          "answers": {
+            "famous_songs": "שירים שאני מכיר/ה",
+            "original_music": "מוזיקה מקורית חדשה",
+            "no_preference": "אין לי העדפה"
+          }
+        },
+        "q7_length": {
+          "question_text": "כמה זמן אתם רוצים שתהיה ההצגה?",
+          "answers": {
+            "short": "לא יותר מדי ארוכה",
+            "dont_care": "לא אכפת לי"
+          }
+        },
         "q11_seen_before": { "question_text": "איזה ממחזות הזמר האלו כבר ראיתם ואהבתם?" },
         "q_priority_rank": {
           "question_text": "מה הכי חשוב לכם במחזמר?",
