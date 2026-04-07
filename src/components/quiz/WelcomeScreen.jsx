@@ -145,7 +145,7 @@ export default function WelcomeScreen({ onStart }) {
         {/* ── Get started ────────────────────────── */}
         <p style={sectionLabel}>{t('get_started')}</p>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2" style={{ gap: 12, marginBottom: 12 }}>
 
           <button onClick={() => onStart('recommendation')} style={cardBase} onMouseEnter={onCardEnter} onMouseLeave={onCardLeave}>
             <div style={{ position: 'absolute', top: -30, right: -30, width: 100, height: 100, borderRadius: '50%', background: 'radial-gradient(circle, rgba(244,169,106,0.15), transparent 70%)', pointerEvents: 'none' }} />
@@ -203,7 +203,7 @@ export default function WelcomeScreen({ onStart }) {
           </Link>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+        <div className="grid grid-cols-1 sm:grid-cols-2" style={{ gap: 12 }}>
           {previewPosts.map((post, i) => (
             <Link
               key={post.slug}

@@ -65,8 +65,8 @@ export default function Nav() {
         {/* Right side: nav links + language + sign-in */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
 
-          {/* Nav links */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          {/* Nav links — hidden on small screens */}
+          <div className="hidden sm:flex" style={{ alignItems: 'center', gap: 2 }}>
             {navLinks.map(({ label, to }) => {
               const active = isActive(to);
               return (
