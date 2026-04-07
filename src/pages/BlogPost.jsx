@@ -5,26 +5,77 @@ import { collection, getDocs, query, where, limit } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import { blogPosts as staticPosts } from '@/data/blogPosts';
 
-/* Very simple markdown-like renderer — bold (**text**) and paragraphs */
+/* Render inline formatting: **bold** and [link text](url) */
+function renderInline(text, keyPrefix = '') {
+  const parts = [];
+  const regex = /\*\*([^*]+)\*\*|\[([^\]]+)\]\(([^)]+)\)/g;
+  let last = 0;
+  let match;
+  while ((match = regex.exec(text)) !== null) {
+    if (match.index > last) parts.push(text.slice(last, match.index));
+    if (match[1] !== undefined) {
+      parts.push(
+        <strong key={keyPrefix + match.index} style={{ color: 'var(--sp-text)', fontWeight: 700 }}>
+          {match[1]}
+        </strong>
+      );
+    } else {
+      parts.push(
+        <a key={keyPrefix + match.index} href={match[3]} target="_blank" rel="noopener noreferrer"
+          style={{ color: 'var(--sp-coral)', fontWeight: 600, textDecoration: 'underline', textUnderlineOffset: 3 }}>
+          {match[2]}
+        </a>
+      );
+    }
+    last = match.index + match[0].length;
+  }
+  if (last < text.length) parts.push(text.slice(last));
+  return parts;
+}
+
+/* Markdown renderer: ### headings, **bold**, [links](url), --- dividers, *italic* */
 function renderContent(content) {
   if (!content) return null;
   return content.split('\n\n').map((block, i) => {
-    // Heading: starts with **text**
-    if (/^\*\*[^*]+\*\*$/.test(block.trim())) {
-      const text = block.trim().replace(/\*\*/g, '');
-      return (
-        <h3 key={i} style={{ fontSize: '1.05rem', fontWeight: 700, color: 'var(--sp-text)', margin: '28px 0 8px', letterSpacing: '-0.01em' }}>
-          {text}
-        </h3>
-      );
-    }
-    // Inline bold
-    const parts = block.split(/\*\*([^*]+)\*\*/g);
+    const t = block.trim();
+
+    // Horizontal rule
+    if (t === '---') return (
+      <hr key={i} style={{ border: 'none', borderTop: '1px solid var(--sp-border)', margin: '32px 0' }} />
+    );
+
+    // ### H3
+    if (t.startsWith('### ')) return (
+      <h3 key={i} style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--sp-text)', margin: '36px 0 10px', letterSpacing: '-0.02em' }}>
+        {renderInline(t.slice(4), `h3-${i}`)}
+      </h3>
+    );
+
+    // ## H2
+    if (t.startsWith('## ')) return (
+      <h2 key={i} style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--sp-text)', margin: '40px 0 12px', letterSpacing: '-0.02em' }}>
+        {renderInline(t.slice(3), `h2-${i}`)}
+      </h2>
+    );
+
+    // Standalone **bold line** → subheading
+    if (/^\*\*[^*]+\*\*$/.test(t)) return (
+      <h4 key={i} style={{ fontSize: '1rem', fontWeight: 700, color: 'var(--sp-text)', margin: '28px 0 8px' }}>
+        {t.replace(/\*\*/g, '')}
+      </h4>
+    );
+
+    // *italic* disclosure / small note
+    if (/^\*[^*].*[^*]\*$/.test(t)) return (
+      <p key={i} style={{ fontSize: '0.82rem', lineHeight: 1.65, color: 'var(--sp-text-3)', fontStyle: 'italic', margin: '0 0 16px' }}>
+        {renderInline(t.slice(1, -1), `em-${i}`)}
+      </p>
+    );
+
+    // Regular paragraph
     return (
-      <p key={i} style={{ fontSize: '0.95rem', lineHeight: 1.75, color: 'var(--sp-text-2)', margin: '0 0 16px' }}>
-        {parts.map((part, j) =>
-          j % 2 === 1 ? <strong key={j} style={{ color: 'var(--sp-text)', fontWeight: 700 }}>{part}</strong> : part
-        )}
+      <p key={i} style={{ fontSize: '0.95rem', lineHeight: 1.8, color: 'var(--sp-text-2)', margin: '0 0 18px' }}>
+        {renderInline(t, `p-${i}`)}
       </p>
     );
   });

@@ -109,4 +109,103 @@ The newest show on this list and one of the most technically impressive things I
 
 Shows with very heavy dialogue (Cabaret if you're not in the mood to think), very long running times, or anything with a lot of avant-garde staging. Save those for when you know you love live theatre.`,
   },
+  {
+    slug: 'west-end-shows-still-worth-seeing-2026',
+    title: '5 West End Shows Still Worth Seeing in 2026 (And Why They Haven\'t Got Old)',
+    tag: 'Guide',
+    emoji: '🎭',
+    readTime: 12,
+    date: 'April 2026',
+    dateISO: '2026-04-07',
+    excerpt: 'These shows have been running long enough that you might assume you\'ve missed the moment. You haven\'t. Here\'s why each one is worth your ticket money right now.',
+    content: `**TL;DR**
+
+These shows have been running long enough that you might assume you've missed the moment. You haven't. Each one has something specific happening in 2026: a cast that's earning the hype, a limited run you'll regret missing, a kind of energy that touring productions can't replicate. If you're in London this year and you're picking shows, start here.
+
+---
+
+### 1. Wicked — Apollo Victoria Theatre
+
+Wicked is turning 20 this year. That alone would be enough reason to mention it. But the real reason Wicked deserves a place on this list is Emma Kingston and Zizi Strallen.
+
+The strong duo leading the show has chemistry that might put Ariana Grande and Cynthia Erivo to look like distant memories, and each one alone is a powerhouse of a performer.
+
+Kingston won Best Takeover Performance at the 2026 WhatsOnStage Awards, and anyone who has seen her as Elphaba knows why. She doesn't play the role as a slow burn to Defying Gravity. She earns every note before she gets there. Strallen opposite her as Glinda is the kind of pairing where the chemistry does half the work. The 20th anniversary cast also brings Jordan Litz from Broadway as Fiyero, with over 1,700 performances in the role, which means the scenes that usually feel a little undercooked don't.
+
+This show has a reputation as a tourist staple, which sometimes makes people feel like they've already seen it. And yes, if you loved the film, you'll recognise the songs. But the stage version gives you something the film can't: two people in the same room as you, doing things with those songs that Ariana and Cynthia simply weren't asked to do. The chemistry is live, the stakes feel real, and Defying Gravity lands differently when there's nowhere to cut.
+
+See it anyway. A great cast changes everything.
+
+**Best for:** First-timers and anyone who saw an earlier cast and thought it was fine but not exceptional. This is one of the more accessible shows on this list for non-native English speakers. The storytelling is visual and the score is enormous.
+
+[Get tickets for Wicked](https://prf.hn/click/camref:1011l57HXB/pubref:appbytsufeden/destination:https%3A%2F%2Fwww.atgtickets.com%2Fshows%2Fwicked%2Fapollo-victoria-theatre%2F)
+
+---
+
+### 2. Hamilton — Victoria Palace Theatre
+
+Hamilton does not need an introduction. What it needs, right now, is a reason to prioritise it over everything else on your list.
+
+**Leslie Odom Jr. plays Aaron Burr 3 July – 5 September 2026 only.**
+
+Odom Jr. created the role on Broadway, won the Tony for it, and this is his first time performing it in the West End. He returned to the role on Broadway in autumn 2025 for a sell-out run. London gets him for nine weeks only.
+
+He steps into a production already in very good shape. Alex Sawyer leads as Alexander Hamilton, and the pairing of Sawyer's Hamilton against Odom Jr.'s Burr is exactly the kind of casting that makes a long-running show feel like an event again.
+
+Even without Odom Jr., Hamilton holds up because the score holds up. Lin-Manuel Miranda wrote something that shouldn't work on paper: American founding fathers, rap, R&B, show tunes. And it works completely. It works every time. But if you can get a ticket for July through September, that's when you go.
+
+**Best for:** Everyone, genuinely. The rap is fast in places, but the storytelling is clear enough that you'll follow every beat. Intermediate English speakers will get the full experience. Ages 10+.
+
+[Get tickets for Hamilton](https://prf.hn/click/camref:1011l57HXB/pubref:appbytsufeden/destination:https%3A%2F%2Fwww.atgtickets.com%2Fshows%2Fhamilton%2Fvictoria-palace-theatre%2F)
+
+---
+
+### 3. Operation Mincemeat — Fortune Theatre
+
+Operation Mincemeat is the most interesting show on this list, and also the one casual theatregoers most often skip because they've never heard of it. That's a mistake.
+
+It's a true story: a real WWII deception operation, performed by a rotating cast that brings new energy every time. That's not marketing language. It's genuinely how this show works: it's self-aware, chaotic, funny in a very specifically British way, and completely aware that it's four people performing a production that is slightly too big for four people. That's the joke and the heart of it at the same time.
+
+The British humour here is dense and rapid. References come fast, the cast riffs, and the comedy lands differently depending on who's onstage that night. It's one of the only West End shows where seeing it twice feels like seeing a different show.
+
+**Best for:** Anyone who loves comedy, anyone who likes theatre that plays with its own form, fans of Horrible Histories or Monty Python-adjacent humour. Honest note: if your English isn't confident, this is the hardest show on this list. The comedy is fast, referential, and very British.
+
+[Get tickets for Operation Mincemeat](https://prf.hn/click/camref:1011l57HXB/pubref:appbytsufeden/destination:https%3A%2F%2Fwww.atgtickets.com%2Fshows%2Foperation-mincemeat-a-new-musical%2Ffortune-theatre%2F)
+
+---
+
+### 4. Hadestown — Lyric Theatre
+
+Hadestown is the show that casual theatregoers walk straight past. It doesn't have a household name in the cast right now. What it has is one of the best scores written for the stage in the last decade: folk, jazz and blues threaded together by Anaïs Mitchell in a way that feels timeless rather than stylised.
+
+A proshot film featuring the five original Broadway leads is coming to cinemas this summer, filmed right here at the Lyric Theatre. Once that film lands, everyone will know what Hadestown is. See it live first. The stage version does things a cinema screen won't.
+
+It's based on the Orpheus and Eurydice myth, set in an industrial underworld ruled by Hades. The themes — hope, fate, whether love survives when the world is stacked against you — don't offer easy answers, and the show doesn't pretend they do. You leave with the music in your head and the questions in your chest.
+
+**Best for:** Anyone who wants to feel something rather than simply be entertained. Not for very young children. The themes are adult and the staging is dark.
+
+[Get tickets for Hadestown](https://nimaxtheatres.com/shows/hadestown/)
+
+---
+
+### 5. Les Misérables — Sondheim Theatre
+
+Les Misérables has been running in the West End since 1985. There is a version of that fact that sounds like a warning: a show that's been going this long risks becoming a monument rather than a performance. It isn't.
+
+It also just won Best West End Show at the 2026 WhatsOnStage Awards — voted for entirely by theatregoers, not critics. What keeps Les Mis relevant isn't nostalgia. It's that the material doesn't age. Revolution, justice, what people do to survive, what they sacrifice for something bigger than themselves. In 2026 those questions land as hard as they did in 1985.
+
+You don't need to know the story before you go. You don't need to have read the book. You just need three hours and willingness to be wrecked.
+
+**Best for:** Anyone on their first West End visit who wants to see something genuinely great. One of the most accessible shows on this list for non-native English speakers.
+
+[Get tickets for Les Misérables](https://prf.hn/click/camref:1011l57HXB/pubref:appbytsufeden/destination:https%3A%2F%2Fwww.atgtickets.com%2Fshows%2Fles-miserables%2Fsondheim-theatre%2F)
+
+---
+
+The short version: if you have time for one West End show this summer and you're visiting in July or August, Hamilton with Odom Jr. is the one. If you've already seen Hamilton, or couldn't get tickets: Operation Mincemeat, and thank me later.
+
+Come tell me which one you're booking on [Instagram](https://instagram.com/tsufi).
+
+*Disclosure: the ticket links above are affiliate links. If you book through them, I earn a small commission at no extra cost to you. It helps me keep writing.*`,
+  },
 ];
