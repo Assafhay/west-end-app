@@ -270,7 +270,48 @@ const resources = {
         "preference_match": "{{winner}} fits your preference for {{preference}} better than {{loser}}.",
         "overall_match": "{{winner}} is a stronger overall match for what you're looking for than {{loser}}.",
         "strong_on": "Strong on {{preference}}"
-      }
+      },
+
+      // Nav & homepage
+      "nav_home": "Home",
+      "nav_blog": "Blog",
+      "nav_about": "About",
+      "home_h1": "Find Your Perfect West End Show",
+      "get_started": "Get Started",
+      "lets_go": "Let's go",
+      "compare_cta": "Compare now",
+      "from_the_blog": "From the blog",
+      "see_all": "See all",
+      "theatre_lover_creator": "Theatre Lover & Creator",
+
+      // About page
+      "about_bio_title": "Hey, I'm Tsuf Eden",
+      "about_bio_tagline": "Theatre lover, West End obsessive, and the person behind Spotlight.",
+      "about_mission_title": "What is Spotlight?",
+      "about_mission_p1": "Spotlight is a personalised show recommendation engine for the London West End. Answer a few quick questions about your mood, group, and taste — and get a recommendation that actually fits.",
+      "about_mission_p2": "It's built for people who want to make the most of their London trip and aren't sure which of the 40+ shows running right now is right for them.",
+      "about_how_title": "How it works",
+      "about_how_step1": "Answer 8–10 quick questions about your vibe, group, and what you're in the mood for.",
+      "about_how_step2": "The engine scores every current West End show against your preferences using a curated database of shows.",
+      "about_how_step3": "You get a ranked shortlist with honest explanations — not just what's popular, but what's right for you.",
+      "about_ai_title": "The recommendation engine",
+      "about_social_title": "Find me online",
+
+      // Blog page
+      "blog_page_title": "Theatre Tips, Guides & Reviews",
+      "blog_subtitle": "Honest writing about the London West End — from someone who actually sees the shows.",
+      "blog_loading": "Loading posts…",
+      "blog_empty": "No posts yet. Check back soon.",
+      "min_read": "min read",
+      "blog_cta_text": "Ready to find your perfect show?",
+
+      // Admin page
+      "admin_page_title": "Admin — Add Post",
+      "admin_add_post": "Save Post",
+      "admin_publish": "Published",
+      "admin_draft": "Draft",
+      "admin_access_denied": "Access Denied",
+      "admin_sign_in_required": "Sign in required"
     }
   },
   he: {
@@ -811,7 +852,48 @@ const resources = {
         "Shorter runtime": "זמן ריצה קצר יותר",
         "Hidden gem": "פנינה נסתרת",
         "Off West End": "אוף-ווסט אנד"
-      }
+      },
+
+      // Nav & homepage
+      "nav_home": "בית",
+      "nav_blog": "בלוג",
+      "nav_about": "אודות",
+      "home_h1": "מצאו את המחזמר המושלם לכם",
+      "get_started": "בואו נתחיל",
+      "lets_go": "יאללה",
+      "compare_cta": "להשוואה",
+      "from_the_blog": "מהבלוג",
+      "see_all": "לכולם",
+      "theatre_lover_creator": "חובבת תיאטרון ויוצרת תוכן",
+
+      // About page
+      "about_bio_title": "היי, אני צוף אדן",
+      "about_bio_tagline": "חובבת תיאטרון, מכורה לווסט אנד, והאדם מאחורי Spotlight.",
+      "about_mission_title": "מה זה Spotlight?",
+      "about_mission_p1": "Spotlight הוא מנוע המלצות מותאם אישית לתיאטראות הווסט אנד של לונדון. ענו על כמה שאלות קצרות על מצב הרוח שלכם, הקבוצה ומה שמתחשק לכם — וקבלו המלצה שבאמת מתאימה.",
+      "about_mission_p2": "בנוי עבור כל מי שרוצה להפיק את המירב מהביקור שלו בלונדון ולא בטוח איזה מ-40+ ההצגות שרצות כרגע מתאים לו.",
+      "about_how_title": "איך זה עובד",
+      "about_how_step1": "ענו על 8–10 שאלות קצרות על האווירה, הקבוצה ומה שבא לכם.",
+      "about_how_step2": "המנוע מדרג כל הצגה מול ההעדפות שלכם על בסיס מסד נתונים מוקפד.",
+      "about_how_step3": "מקבלים רשימה מדורגת עם הסברים כנים — לא רק מה שפופולרי, אלא מה שנכון לכם.",
+      "about_ai_title": "מנוע ההמלצות",
+      "about_social_title": "מצאו אותי ברשת",
+
+      // Blog page
+      "blog_page_title": "טיפים, מדריכים וביקורות",
+      "blog_subtitle": "כתיבה כנה על הווסט אנד הלונדוני — ממישהי שבאמת רואה את ההצגות.",
+      "blog_loading": "טוען פוסטים…",
+      "blog_empty": "אין פוסטים עדיין. חזרו בקרוב.",
+      "min_read": "דק׳ קריאה",
+      "blog_cta_text": "מוכנים למצוא את ההצגה המושלמת?",
+
+      // Admin page
+      "admin_page_title": "ניהול — הוסף פוסט",
+      "admin_add_post": "שמור פוסט",
+      "admin_publish": "מפורסם",
+      "admin_draft": "טיוטה",
+      "admin_access_denied": "גישה נדחתה",
+      "admin_sign_in_required": "נדרשת התחברות"
     }
   },
 
@@ -1215,7 +1297,48 @@ const resources = {
         "Wholesome": "Sain et bienveillant",
         "Witty": "Spirituel",
         "Workplace Drama": "Drame au travail"
-      }
+      },
+
+      // Nav & homepage
+      "nav_home": "Accueil",
+      "nav_blog": "Blog",
+      "nav_about": "À propos",
+      "home_h1": "Trouvez votre comédie musicale idéale",
+      "get_started": "Commencer",
+      "lets_go": "C'est parti",
+      "compare_cta": "Comparer",
+      "from_the_blog": "Du blog",
+      "see_all": "Voir tout",
+      "theatre_lover_creator": "Passionnée de théâtre & créatrice",
+
+      // About page
+      "about_bio_title": "Bonjour, je suis Tsuf Eden",
+      "about_bio_tagline": "Passionnée de théâtre, accro au West End, et la créatrice de Spotlight.",
+      "about_mission_title": "Qu'est-ce que Spotlight ?",
+      "about_mission_p1": "Spotlight est un moteur de recommandations personnalisé pour le West End londonien. Répondez à quelques questions sur votre humeur, votre groupe et vos goûts — et obtenez une recommandation qui vous convient vraiment.",
+      "about_mission_p2": "Conçu pour ceux qui veulent profiter au maximum de leur séjour à Londres et ne savent pas lequel des 40+ spectacles en cours leur correspond.",
+      "about_how_title": "Comment ça marche",
+      "about_how_step1": "Répondez à 8–10 questions rapides sur votre ambiance, votre groupe et ce qui vous tente.",
+      "about_how_step2": "Le moteur note chaque spectacle du West End selon vos préférences grâce à une base de données soigneusement élaborée.",
+      "about_how_step3": "Vous recevez une liste classée avec des explications honnêtes — pas seulement ce qui est populaire, mais ce qui vous convient.",
+      "about_ai_title": "Le moteur de recommandation",
+      "about_social_title": "Retrouvez-moi en ligne",
+
+      // Blog page
+      "blog_page_title": "Conseils, guides et critiques",
+      "blog_subtitle": "Des écrits sincères sur le West End londonien — par quelqu'un qui voit vraiment les spectacles.",
+      "blog_loading": "Chargement des articles…",
+      "blog_empty": "Aucun article pour l'instant. Revenez bientôt.",
+      "min_read": "min de lecture",
+      "blog_cta_text": "Prêt(e) à trouver votre spectacle idéal ?",
+
+      // Admin page
+      "admin_page_title": "Admin — Ajouter un article",
+      "admin_add_post": "Enregistrer l'article",
+      "admin_publish": "Publié",
+      "admin_draft": "Brouillon",
+      "admin_access_denied": "Accès refusé",
+      "admin_sign_in_required": "Connexion requise"
     }
   },
 
@@ -1619,7 +1742,48 @@ const resources = {
         "Wholesome": "Íntegro y positivo",
         "Witty": "Ingenioso",
         "Workplace Drama": "Drama laboral"
-      }
+      },
+
+      // Nav & homepage
+      "nav_home": "Inicio",
+      "nav_blog": "Blog",
+      "nav_about": "Acerca de",
+      "home_h1": "Encuentra tu musical perfecto",
+      "get_started": "Empezar",
+      "lets_go": "¡Vamos!",
+      "compare_cta": "Comparar",
+      "from_the_blog": "Del blog",
+      "see_all": "Ver todo",
+      "theatre_lover_creator": "Amante del teatro y creadora de contenido",
+
+      // About page
+      "about_bio_title": "Hola, soy Tsuf Eden",
+      "about_bio_tagline": "Amante del teatro, obsesionada con el West End y la creadora de Spotlight.",
+      "about_mission_title": "¿Qué es Spotlight?",
+      "about_mission_p1": "Spotlight es un motor de recomendaciones personalizado para el West End de Londres. Responde unas preguntas rápidas sobre tu estado de ánimo, grupo y gustos — y obtén una recomendación que realmente encaje.",
+      "about_mission_p2": "Diseñado para quienes quieren aprovechar al máximo su visita a Londres y no saben cuál de los 40+ espectáculos en cartel es el ideal para ellos.",
+      "about_how_title": "Cómo funciona",
+      "about_how_step1": "Responde 8–10 preguntas rápidas sobre tu ánimo, tu grupo y lo que te apetece.",
+      "about_how_step2": "El motor puntúa cada espectáculo del West End según tus preferencias usando una base de datos cuidadosamente curada.",
+      "about_how_step3": "Recibes una lista clasificada con explicaciones honestas — no solo lo más popular, sino lo que más te conviene.",
+      "about_ai_title": "El motor de recomendación",
+      "about_social_title": "Encuéntrame online",
+
+      // Blog page
+      "blog_page_title": "Consejos, guías y reseñas",
+      "blog_subtitle": "Escritura honesta sobre el West End londinense — de alguien que realmente ve los espectáculos.",
+      "blog_loading": "Cargando artículos…",
+      "blog_empty": "Todavía no hay artículos. Vuelve pronto.",
+      "min_read": "min de lectura",
+      "blog_cta_text": "¿Listo para encontrar tu espectáculo perfecto?",
+
+      // Admin page
+      "admin_page_title": "Admin — Añadir artículo",
+      "admin_add_post": "Guardar artículo",
+      "admin_publish": "Publicado",
+      "admin_draft": "Borrador",
+      "admin_access_denied": "Acceso denegado",
+      "admin_sign_in_required": "Se requiere iniciar sesión"
     }
   },
 
@@ -2023,7 +2187,48 @@ const resources = {
         "Wholesome": "إيجابي وصحي",
         "Witty": "بارع الفكاهة",
         "Workplace Drama": "دراما العمل"
-      }
+      },
+
+      // Nav & homepage
+      "nav_home": "الرئيسية",
+      "nav_blog": "المدونة",
+      "nav_about": "حول",
+      "home_h1": "اعثر على عرضك الموسيقي المثالي",
+      "get_started": "ابدأ الآن",
+      "lets_go": "هيا بنا",
+      "compare_cta": "قارن الآن",
+      "from_the_blog": "من المدونة",
+      "see_all": "عرض الكل",
+      "theatre_lover_creator": "عاشقة المسرح وصانعة محتوى",
+
+      // About page
+      "about_bio_title": "مرحباً، أنا تسوف إيدن",
+      "about_bio_tagline": "عاشقة للمسرح، مدمنة على الويست إند، والشخص خلف Spotlight.",
+      "about_mission_title": "ما هو Spotlight؟",
+      "about_mission_p1": "Spotlight هو محرك توصيات مخصص للمسرح الغنائي في لندن. أجب على بعض الأسئلة السريعة حول مزاجك ومجموعتك وأذواقك — واحصل على توصية تناسبك حقاً.",
+      "about_mission_p2": "مصمم لمن يريدون الاستفادة القصوى من زيارتهم للندن ولا يعرفون أي من أكثر من 40 عرضاً يناسبهم.",
+      "about_how_title": "كيف يعمل",
+      "about_how_step1": "أجب على 8–10 أسئلة سريعة حول مزاجك ومجموعتك وما تودّ مشاهدته.",
+      "about_how_step2": "يقيّم المحرك كل عرض في الويست إند بناءً على تفضيلاتك باستخدام قاعدة بيانات مختارة بعناية.",
+      "about_how_step3": "تحصل على قائمة مرتبة مع تفسيرات صادقة — ليس فقط ما هو شائع، بل ما يناسبك أنت.",
+      "about_ai_title": "محرك التوصيات",
+      "about_social_title": "تواصل معي عبر الإنترنت",
+
+      // Blog page
+      "blog_page_title": "نصائح ودلائل ومراجعات",
+      "blog_subtitle": "كتابة صادقة حول مسرح الويست إند اللندني — من شخص يشاهد العروض فعلاً.",
+      "blog_loading": "جارٍ تحميل المقالات…",
+      "blog_empty": "لا توجد مقالات حتى الآن. تحقق مرة أخرى قريباً.",
+      "min_read": "دقيقة قراءة",
+      "blog_cta_text": "هل أنت مستعد للعثور على عرضك المثالي؟",
+
+      // Admin page
+      "admin_page_title": "الإدارة — إضافة مقال",
+      "admin_add_post": "حفظ المقال",
+      "admin_publish": "منشور",
+      "admin_draft": "مسودة",
+      "admin_access_denied": "تم رفض الوصول",
+      "admin_sign_in_required": "تسجيل الدخول مطلوب"
     }
   }
 

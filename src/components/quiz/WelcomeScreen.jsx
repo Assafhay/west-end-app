@@ -1,115 +1,275 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-import { Sparkles, Theater, Clock, Star } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import AboutRecommendation from '@/components/results/AboutRecommendation';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { blogPosts } from '@/data/blogPosts';
 
+/* ── shared style objects ─────────────────────────────────── */
+const sectionLabel = {
+  fontSize: '0.7rem',
+  fontWeight: 600,
+  letterSpacing: '0.08em',
+  textTransform: 'uppercase',
+  color: 'var(--sp-text-3)',
+  margin: '28px 0 12px 2px',
+};
+
+const cardBase = {
+  background: 'var(--sp-surface)',
+  border: '1px solid var(--sp-border)',
+  borderRadius: 'var(--sp-radius)',
+  padding: '26px 22px 22px',
+  cursor: 'pointer',
+  boxShadow: 'var(--sp-shadow-sm)',
+  position: 'relative',
+  overflow: 'hidden',
+  textDecoration: 'none',
+  color: 'inherit',
+  display: 'block',
+  textAlign: 'start',
+  width: '100%',
+  transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+};
+
+const cardIcon = {
+  width: 42,
+  height: 42,
+  borderRadius: 12,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontSize: '1.2rem',
+  marginBottom: 14,
+  background: 'var(--sp-peach-light)',
+};
+
+const cardH2 = {
+  fontSize: '1rem',
+  fontWeight: 700,
+  letterSpacing: '-0.02em',
+  color: 'var(--sp-text)',
+  marginBottom: 5,
+};
+
+const cardP = {
+  fontSize: '0.82rem',
+  lineHeight: 1.5,
+  color: 'var(--sp-text-2)',
+  margin: 0,
+};
+
+const cardCta = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: 3,
+  marginTop: 14,
+  fontSize: '0.76rem',
+  fontWeight: 600,
+  color: 'var(--sp-coral)',
+};
+
+/* ── hover helpers ────────────────────────────────────────── */
+const onCardEnter   = e => { e.currentTarget.style.transform = 'translateY(-4px) scale(1.01)'; e.currentTarget.style.boxShadow = 'var(--sp-shadow-lg)'; };
+const onCardLeave   = e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'var(--sp-shadow-sm)'; };
+const onBrowseEnter = e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = 'var(--sp-shadow-md)'; };
+const onBrowseLeave = e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'var(--sp-shadow-sm)'; };
+const onBlogEnter   = e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = 'var(--sp-shadow-md)'; };
+const onBlogLeave   = e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'var(--sp-shadow-sm)'; };
+
+/* ── component ────────────────────────────────────────────── */
 export default function WelcomeScreen({ onStart }) {
   const { t } = useTranslation();
+  const previewPosts = blogPosts.slice(0, 2);
 
   return (
-    <div className="bg-gradient-to-br from-[#FAFAF8] via-white to-[#F5F0EB] flex flex-col">
-      <div className="flex-1 flex flex-col items-center justify-center px-6 py-12 min-h-[calc(100vh-200px)]">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center max-w-md"
-        >
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-            className="w-20 h-20 mx-auto mb-6"
-          >
+    <div style={{ background: 'var(--sp-bg)', minHeight: '100vh', position: 'relative' }}>
+
+      {/* Warm radial glow behind header */}
+      <div style={{
+        position: 'fixed', top: -200, left: '50%', transform: 'translateX(-50%)',
+        width: 900, height: 600,
+        background: 'radial-gradient(ellipse, rgba(244,169,106,0.18) 0%, transparent 70%)',
+        pointerEvents: 'none', zIndex: 0,
+      }} />
+
+      {/* Page wrapper */}
+      <div style={{
+        position: 'relative', zIndex: 1,
+        maxWidth: 680, margin: '0 auto', padding: '0 24px 80px',
+        animation: 'sp-fade-up 0.6s ease both',
+      }}>
+
+        {/* ── Header ─────────────────────────────── */}
+        <header style={{ paddingTop: 44, textAlign: 'center', marginBottom: 36 }}>
+
+          {/* App icon + glow ring */}
+          <div style={{ position: 'relative', display: 'inline-block', marginBottom: 20 }}>
             <img
-              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/6957de33ee2bf0b408535143/b2cf63bff_image.png"
-              alt="Spotlight Logo"
-              className="w-full h-full object-contain"
+              src="/favicon.png"
+              alt="Spotlight"
+              style={{
+                width: 84, height: 84, borderRadius: 22, display: 'block',
+                boxShadow: '0 8px 24px rgba(232,115,74,0.3), 0 2px 8px rgba(0,0,0,0.1)',
+              }}
             />
-          </motion.div>
+            <div style={{
+              position: 'absolute', inset: -14, borderRadius: 36,
+              background: 'radial-gradient(circle, rgba(244,169,106,0.2) 0%, transparent 70%)',
+              zIndex: -1,
+            }} />
+          </div>
 
-          <motion.h1
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="text-3xl md:text-4xl font-bold text-slate-900 mb-3 tracking-tight"
-          >
-            {t('welcome_title')}
-          </motion.h1>
+          {/* Location badge */}
+          <div style={{ marginBottom: 14 }}>
+            <span style={{
+              display: 'inline-flex', alignItems: 'center', gap: 5,
+              background: 'var(--sp-peach-light)', color: 'var(--sp-coral)',
+              fontSize: '0.7rem', fontWeight: 600, letterSpacing: '0.04em', textTransform: 'uppercase',
+              padding: '5px 12px', borderRadius: 100,
+            }}>
+              📍 London West End
+            </span>
+          </div>
 
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-            className="text-slate-600 text-base md:text-lg mb-6 leading-relaxed"
-          >
+          <h1 style={{
+            fontSize: 'clamp(1.85rem, 6vw, 2.5rem)', fontWeight: 700,
+            lineHeight: 1.15, letterSpacing: '-0.03em', color: 'var(--sp-text)', marginBottom: 10,
+          }}>
+            {t('home_h1')}
+          </h1>
+
+          <p style={{ fontSize: '1rem', color: 'var(--sp-text-2)', lineHeight: 1.5, margin: 0 }}>
             {t('welcome_subtitle')}
-          </motion.p>
+          </p>
+        </header>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="w-full max-w-4xl"
+        {/* ── Get started ────────────────────────── */}
+        <p style={sectionLabel}>{t('get_started')}</p>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
+
+          <button onClick={() => onStart('recommendation')} style={cardBase} onMouseEnter={onCardEnter} onMouseLeave={onCardLeave}>
+            <div style={{ position: 'absolute', top: -30, right: -30, width: 100, height: 100, borderRadius: '50%', background: 'radial-gradient(circle, rgba(244,169,106,0.15), transparent 70%)', pointerEvents: 'none' }} />
+            <div style={cardIcon}>🎯</div>
+            <h2 style={cardH2}>{t('start_fresh')}</h2>
+            <p style={cardP}>{t('start_fresh_desc')}</p>
+            <span style={cardCta}>{t('lets_go')} →</span>
+          </button>
+
+          <button onClick={() => onStart('comparison')} style={cardBase} onMouseEnter={onCardEnter} onMouseLeave={onCardLeave}>
+            <div style={{ position: 'absolute', top: -30, right: -30, width: 100, height: 100, borderRadius: '50%', background: 'radial-gradient(circle, rgba(244,169,106,0.15), transparent 70%)', pointerEvents: 'none' }} />
+            <div style={cardIcon}>🤔</div>
+            <h2 style={cardH2}>{t('cant_decide')}</h2>
+            <p style={cardP}>{t('cant_decide_desc')}</p>
+            <span style={cardCta}>{t('compare_cta')} →</span>
+          </button>
+        </div>
+
+        {/* Browse All — full width */}
+        <button
+          onClick={() => onStart('browse')}
+          style={{
+            background: 'linear-gradient(135deg, #fff3ec 0%, #fde8d4 100%)',
+            border: '1px solid rgba(244,169,106,0.25)',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+            padding: '24px 26px', borderRadius: 'var(--sp-radius)',
+            cursor: 'pointer', boxShadow: 'var(--sp-shadow-sm)',
+            width: '100%', textAlign: 'start',
+            transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+          }}
+          onMouseEnter={onBrowseEnter}
+          onMouseLeave={onBrowseLeave}
+        >
+          <div>
+            <h2 style={cardH2}>{t('browse_all')}</h2>
+            <p style={cardP}>{t('browse_all_desc')}</p>
+          </div>
+          <span style={{ fontSize: '2.2rem', flexShrink: 0, marginInlineStart: 14 }}>🎭</span>
+        </button>
+
+        {/* ── Blog strip ─────────────────────────── */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', margin: '28px 0 14px' }}>
+          <p style={{ ...sectionLabel, margin: 0 }}>{t('from_the_blog')}</p>
+          <Link
+            to="/Blog"
+            style={{
+              fontSize: '0.78rem', fontWeight: 600, color: 'var(--sp-coral)',
+              textDecoration: 'none', padding: '4px 10px', borderRadius: 100,
+              background: 'var(--sp-peach-light)', transition: 'background 0.15s',
+            }}
+            onMouseEnter={e => e.currentTarget.style.background = 'var(--sp-peach-mid)'}
+            onMouseLeave={e => e.currentTarget.style.background = 'var(--sp-peach-light)'}
           >
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                <button
-                  onClick={() => onStart('recommendation')}
-                  className="group border-2 border-slate-200 hover:border-transparent text-slate-900 hover:bg-gradient-to-r hover:from-[#7C2D3E] hover:to-[#9B3A4F] hover:text-white rounded-2xl p-4 md:p-6 shadow-lg hover:shadow-xl hover:shadow-[#7C2D3E]/20 transition-all duration-300 hover:scale-105 flex flex-col items-center justify-center text-center min-h-[140px] md:min-h-[160px] w-full"
-                >
-                  <span className="text-base md:text-xl font-bold mb-2 md:mb-3">{t('start_fresh')}</span>
-                  <span className="text-xs md:text-sm text-slate-600 group-hover:text-white/90 leading-relaxed">
-                    {t('start_fresh_desc')}
-                  </span>
-                </button>
+            {t('see_all')} →
+          </Link>
+        </div>
 
-                <button
-                  onClick={() => onStart('comparison')}
-                  className="group border-2 border-slate-200 hover:border-transparent text-slate-900 hover:bg-gradient-to-r hover:from-[#7C2D3E] hover:to-[#9B3A4F] hover:text-white rounded-2xl p-4 md:p-6 shadow-lg hover:shadow-xl hover:shadow-[#7C2D3E]/20 transition-all duration-300 hover:scale-105 flex flex-col items-center justify-center text-center min-h-[140px] md:min-h-[160px] w-full"
-                >
-                  <span className="text-base md:text-xl font-bold mb-2 md:mb-3">{t('cant_decide')}</span>
-                  <span className="text-xs md:text-sm text-slate-600 group-hover:text-white/90 leading-relaxed">
-                    {t('cant_decide_desc')}
-                  </span>
-                </button>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          {previewPosts.map((post, i) => (
+            <Link
+              key={post.slug}
+              to={`/Blog/${post.slug}`}
+              style={{
+                background: 'var(--sp-surface)', border: '1px solid var(--sp-border)',
+                borderRadius: 'var(--sp-radius)', overflow: 'hidden',
+                textDecoration: 'none', color: 'inherit', display: 'block',
+                boxShadow: 'var(--sp-shadow-sm)', transition: 'transform 0.2s, box-shadow 0.2s',
+              }}
+              onMouseEnter={onBlogEnter}
+              onMouseLeave={onBlogLeave}
+            >
+              <div style={{
+                height: 110, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.4rem',
+                background: i === 0
+                  ? 'linear-gradient(135deg, #fde3c8, #f9c7a0)'
+                  : 'linear-gradient(135deg, #fde8d4, rgba(244,197,106,0.2))',
+              }}>
+                {post.emoji}
               </div>
+              <div style={{ padding: '14px 16px 16px' }}>
+                <p style={{ fontSize: '0.65rem', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--sp-coral)', marginBottom: 6 }}>
+                  {post.tag}
+                </p>
+                <h3 style={{ fontSize: '0.88rem', fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.3, color: 'var(--sp-text)', marginBottom: 6 }}>
+                  {post.title}
+                </h3>
+                <p style={{ fontSize: '0.72rem', color: 'var(--sp-text-3)', margin: 0 }}>
+                  Tsuf Eden · {post.readTime} min read
+                </p>
+              </div>
+            </Link>
+          ))}
+        </div>
 
-              <button
-                onClick={() => onStart('browse')}
-                className="group w-full border-2 border-slate-200 hover:border-transparent text-slate-900 hover:bg-gradient-to-r hover:from-[#7C2D3E] hover:to-[#9B3A4F] hover:text-white rounded-2xl p-4 md:p-6 shadow-lg hover:shadow-xl hover:shadow-[#7C2D3E]/20 transition-all duration-300 hover:scale-105 flex flex-col items-center justify-center text-center min-h-[100px]"
-              >
-                <span className="text-base md:text-xl font-bold mb-2">{t('browse_all')}</span>
-                <span className="text-xs md:text-sm text-slate-600 group-hover:text-white/90 leading-relaxed">
-                  {t('browse_all_desc')}
-                </span>
-              </button>
+        {/* ── About card ─────────────────────────── */}
+        <p style={{ ...sectionLabel, marginTop: 28 }}>{t('nav_about')}</p>
 
-              {/* Questions V2 - Hidden for now */}
-              {/* <button
-                onClick={() => onStart('recommendation_v2')}
-                className="group w-full border-2 border-slate-200 hover:border-transparent text-slate-900 hover:bg-gradient-to-r hover:from-[#7C2D3E] hover:to-[#9B3A4F] hover:text-white rounded-2xl p-4 md:p-6 shadow-lg hover:shadow-xl hover:shadow-[#7C2D3E]/20 transition-all duration-300 hover:scale-105 flex flex-col items-center justify-center text-center min-h-[100px]"
-              >
-                <span className="text-base md:text-xl font-bold mb-2">{t('questions_v2')}</span>
-                <span className="text-xs md:text-sm text-slate-600 group-hover:text-white/90 leading-relaxed">
-                  {t('questions_v2_desc')}
-                </span>
-              </button> */}
+        <div style={{
+          background: 'var(--sp-surface)', border: '1px solid var(--sp-border)',
+          borderRadius: 'var(--sp-radius)', padding: '26px 26px 22px', boxShadow: 'var(--sp-shadow-sm)',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+            <div style={{
+              width: 42, height: 42, borderRadius: '50%',
+              background: 'linear-gradient(135deg, #f7c49a, var(--sp-coral))',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: '1.1rem', flexShrink: 0,
+            }}>🎭</div>
+            <div>
+              <strong style={{ display: 'block', fontSize: '0.9rem', fontWeight: 600, color: 'var(--sp-text)' }}>Tsuf Eden</strong>
+              <span style={{ fontSize: '0.78rem', color: 'var(--sp-text-3)' }}>{t('theatre_lover_creator')}</span>
             </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
-            className="mt-8"
+          </div>
+          <p style={{ fontSize: '0.88rem', lineHeight: 1.6, color: 'var(--sp-text-2)', margin: 0 }}>
+            {t('about_recommendation_p1')} {t('about_recommendation_p2')}
+          </p>
+          <Link
+            to="/About"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 4, marginTop: 12, fontSize: '0.8rem', fontWeight: 600, color: 'var(--sp-coral)', textDecoration: 'none' }}
           >
-            <AboutRecommendation partialExpand={true} collapsible={true} title={t('about_app')} />
-          </motion.div>
+            {t('read_more')} →
+          </Link>
+        </div>
 
-        </motion.div>
       </div>
     </div>
   );
