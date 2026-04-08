@@ -1,9 +1,8 @@
-// Static fallback blog posts — used by WelcomeScreen preview strip.
-// The real Blog and BlogPost pages read from Firestore.
-// These are also used to seed Firestore (see Admin setup).
+// Static fallback — kept empty. All posts live in Firestore.
+// Use the Admin page to add posts.
 
 export const blogPosts = [
-  {
+  /*{
     slug: 'hamilton-still-hits-different-2025',
     title: 'Why Hamilton Still Hits Different in 2025',
     tag: 'Review',
@@ -208,4 +207,5 @@ Come tell me which one you're booking on [Instagram](https://instagram.com/tsufi
 
 *Disclosure: the ticket links above are affiliate links. If you book through them, I earn a small commission at no extra cost to you. It helps me keep writing.*`,
   },
+  */
 ];
