@@ -254,12 +254,14 @@ export default function WelcomeScreen({ onStart }) {
           borderRadius: 'var(--sp-radius)', padding: '26px 26px 22px', boxShadow: 'var(--sp-shadow-sm)',
         }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
-            <div style={{
-              width: 42, height: 42, borderRadius: '50%',
-              background: 'linear-gradient(135deg, #f7c49a, var(--sp-coral))',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: '1.1rem', flexShrink: 0,
-            }}>🎭</div>
+            <img
+              src="/tsuf.jpg"
+              alt="Tsuf Eden"
+              style={{
+                width: 42, height: 42, borderRadius: '50%', flexShrink: 0,
+                objectFit: 'cover', objectPosition: 'center top',
+              }}
+            />
             <div>
               <strong style={{ display: 'block', fontSize: '0.9rem', fontWeight: 600, color: 'var(--sp-text)' }}>Tsuf Eden</strong>
               <span style={{ fontSize: '0.78rem', color: 'var(--sp-text-3)' }}>{t('theatre_lover_creator')}</span>

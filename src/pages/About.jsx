@@ -93,11 +93,14 @@ export default function About() {
 
         {/* ── Bio card ───────────────────────── */}
         <div style={{ ...card, display: 'flex', gap: 20, alignItems: 'flex-start' }}>
-          <div style={{
-            width: 64, height: 64, borderRadius: '50%', flexShrink: 0,
-            background: 'linear-gradient(135deg, #f7c49a, var(--sp-coral))',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.8rem',
-          }}>🎭</div>
+          <img
+            src="/tsuf.jpg"
+            alt="Tsuf Eden"
+            style={{
+              width: 64, height: 64, borderRadius: '50%', flexShrink: 0,
+              objectFit: 'cover', objectPosition: 'center top',
+            }}
+          />
           <div>
             <strong style={{ display: 'block', fontSize: '1rem', fontWeight: 700, color: 'var(--sp-text)', marginBottom: 4 }}>
               Tsuf Eden
