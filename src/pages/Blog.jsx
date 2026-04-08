@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { collection, getDocs, query, where, orderBy } from 'firebase/firestore';
-import { db } from '@/lib/firebase';
-import { blogPosts as staticPosts } from '@/data/blogPosts';
+import { fetchPosts } from '@/lib/contentful';
 
 const sectionLabel = {
   fontSize: '0.7rem',
@@ -20,27 +18,10 @@ export default function Blog() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchPosts() {
-      try {
-        const q = query(
-          collection(db, 'posts'),
-          where('published', '==', true),
-          orderBy('dateISO', 'desc')
-        );
-        const snap = await getDocs(q);
-        if (snap.empty) {
-          setPosts(staticPosts);
-        } else {
-          setPosts(snap.docs.map(d => ({ id: d.id, ...d.data() })));
-        }
-      } catch (err) {
-        console.error('Failed to load posts from Firestore, using static fallback:', err);
-        setPosts(staticPosts);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchPosts();
+    fetchPosts()
+      .then(setPosts)
+      .catch(err => console.error('Failed to load posts:', err))
+      .finally(() => setLoading(false));
   }, []);
 
   return (
