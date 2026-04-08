@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { blogPosts } from '@/data/blogPosts';
+import { collection, getDocs, query, where, orderBy, limit } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import { blogPosts as staticPosts } from '@/data/blogPosts';
 
 /* ── shared style objects ─────────────────────────────────── */
 const sectionLabel = {
@@ -78,7 +80,27 @@ const onBlogLeave   = e => { e.currentTarget.style.transform = 'none'; e.current
 /* ── component ────────────────────────────────────────────── */
 export default function WelcomeScreen({ onStart }) {
   const { t } = useTranslation();
-  const previewPosts = blogPosts.slice(0, 2);
+  const [previewPosts, setPreviewPosts] = useState(staticPosts.slice(0, 2));
+
+  useEffect(() => {
+    async function fetchPosts() {
+      try {
+        const q = query(
+          collection(db, 'posts'),
+          where('published', '==', true),
+          orderBy('dateISO', 'desc'),
+          limit(2)
+        );
+        const snap = await getDocs(q);
+        if (!snap.empty) {
+          setPreviewPosts(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+        }
+      } catch (err) {
+        // silently keep static fallback
+      }
+    }
+    fetchPosts();
+  }, []);
 
   return (
     <div style={{ background: 'var(--sp-bg)', minHeight: '100vh', position: 'relative' }}>
