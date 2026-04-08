@@ -59,6 +59,35 @@ export default function Admin() {
   const [error, setError] = useState('');
   const [seeding, setSeeding] = useState(false);
   const [seedMsg, setSeedMsg] = useState('');
+  const contentRef = React.useRef(null);
+
+  const insertAtCursor = (before, after = '', placeholder = 'text') => {
+    const el = contentRef.current;
+    if (!el) return;
+    const start = el.selectionStart;
+    const end = el.selectionEnd;
+    const selected = form.content.slice(start, end) || placeholder;
+    const inserted = before + selected + after;
+    const newContent = form.content.slice(0, start) + inserted + form.content.slice(end);
+    set('content', newContent);
+    setTimeout(() => {
+      el.focus();
+      el.setSelectionRange(start + before.length, start + before.length + selected.length);
+    }, 0);
+  };
+
+  const insertLink = () => {
+    const url = window.prompt('Enter URL:');
+    if (!url) return;
+    const el = contentRef.current;
+    if (!el) return;
+    const start = el.selectionStart;
+    const end = el.selectionEnd;
+    const selected = form.content.slice(start, end) || 'link text';
+    const inserted = `[${selected}](${url})`;
+    const newContent = form.content.slice(0, start) + inserted + form.content.slice(end);
+    set('content', newContent);
+  };
 
   const isAdmin = user && (user.id === ADMIN_UID || !ADMIN_UID);
 
@@ -306,14 +335,35 @@ export default function Admin() {
           </div>
 
           <div style={fieldWrap}>
-            <label style={labelStyle}>
-              Content * — use **text** for bold, blank lines for paragraphs
-            </label>
+            <label style={labelStyle}>Content *</label>
+
+            {/* Formatting toolbar */}
+            <div style={{ display: 'flex', gap: 6, marginBottom: 8, flexWrap: 'wrap' }}>
+              {[
+                { label: 'B', title: 'Bold', action: () => insertAtCursor('**', '**', 'bold text') },
+                { label: 'H3', title: 'Heading', action: () => insertAtCursor('### ', '', 'Heading') },
+                { label: '—', title: 'Divider', action: () => insertAtCursor('\n\n---\n\n', '', '') },
+                { label: '🔗 Link', title: 'Insert link', action: insertLink },
+              ].map(btn => (
+                <button key={btn.label} type="button" title={btn.title} onClick={btn.action} style={{
+                  padding: '5px 12px', borderRadius: 8, fontSize: '0.78rem', fontWeight: 700,
+                  border: '1px solid var(--sp-border)', background: 'var(--sp-surface)',
+                  color: 'var(--sp-text-2)', cursor: 'pointer',
+                }}>
+                  {btn.label}
+                </button>
+              ))}
+              <span style={{ fontSize: '0.72rem', color: 'var(--sp-text-3)', alignSelf: 'center', marginLeft: 4 }}>
+                Blank line = new paragraph
+              </span>
+            </div>
+
             <textarea
+              ref={contentRef}
               style={{ ...inputStyle, minHeight: 320, resize: 'vertical', fontFamily: 'monospace', fontSize: '0.85rem' }}
               value={form.content}
               onChange={e => set('content', e.target.value)}
-              placeholder={"**Heading**\n\nParagraph text here.\n\n**Another heading**\n\nMore text."}
+              placeholder={"### Heading\n\nParagraph text here.\n\n[Link text](https://example.com)\n\n---\n\nMore text."}
               required
               onFocus={e => e.target.style.borderColor = 'var(--sp-coral)'}
               onBlur={e => e.target.style.borderColor = 'var(--sp-border)'}
